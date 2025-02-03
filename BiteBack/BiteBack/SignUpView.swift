@@ -16,18 +16,16 @@ struct SignUpView: View {
     @State private var errorMessage: String = ""
     
     var body: some View {
-        VStack(spacing: 20) {
-            // Logo Placeholder for Sign-Up
-            Image("yourSignUpLogo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .padding(.bottom, 20)
-            
-            Text("Sign Up")
-                .font(.largeTitle)
-                .bold()
-                .padding(.bottom, 10)
+        VStack(spacing: 30) {
+            VStack(spacing: 10) {
+                Text("Sign Up")
+                    .font(.title2)
+                    .bold()
+                    .padding(.top, 30)
+                
+                Text("Let's create your account.")
+                    .foregroundColor(.gray)
+            }
             
             // Name TextField
             TextField("Name", text: $name)
@@ -64,7 +62,7 @@ struct SignUpView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Color(red: 1.0, green: 0.65980, blue: 0))
                     .cornerRadius(8)
             }
             .padding(.top, 10)
@@ -82,14 +80,39 @@ struct SignUpView: View {
     }
     
     // Dummy Sign-Up Function
+    // MARK: - Sign-Up Validation Function
     func signUpUser() {
-        if name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty {
+        // Validate non-empty fields.
+        guard !name.trimmingCharacters(in: .whitespaces).isEmpty,
+              !email.trimmingCharacters(in: .whitespaces).isEmpty,
+              !phone.trimmingCharacters(in: .whitespaces).isEmpty,
+              !password.isEmpty else {
             errorMessage = "Please fill in all fields."
-        } else {
-            errorMessage = ""
-            print("User signed up: \(name), email: \(email)")
-            // After a successful sign-up, navigate as needed.
+            return
         }
+        
+        // Validate email format.
+        guard email.isValidEmail else {
+            errorMessage = "Please enter a valid email address."
+            return
+        }
+        
+        // Validate that the phone number contains only digits.
+        guard phone.allSatisfy({ $0.isNumber }) else {
+            errorMessage = "Phone number should contain only digits."
+            return
+        }
+        
+        // Validate password length (e.g., minimum 6 characters).
+        guard password.count >= 6 else {
+            errorMessage = "Password must be at least 6 characters."
+            return
+        }
+        
+        // If all validation passes, clear the error and continue.
+        errorMessage = ""
+        print("User signed up: \(name), email: \(email)")
+        // Continue with your sign-up logic…
     }
 }
 
