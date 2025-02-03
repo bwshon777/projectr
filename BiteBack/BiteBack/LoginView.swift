@@ -73,8 +73,11 @@ struct LoginView: View {
             NavigationLink(destination: ForgotPasswordView()) {
                 Text("Forgot Password?")
                     .font(.subheadline)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color(red: 1.0, green: 0.65980, blue: 0))
             }
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.top, -20)
+            
             
             // Log In Button
             Button(action: {

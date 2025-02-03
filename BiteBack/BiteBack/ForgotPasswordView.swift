@@ -16,14 +16,15 @@ struct ForgotPasswordView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Forgot Password")
-                .font(.largeTitle)
+            Text("Forgot your password?")
+                .font(.title2)
                 .bold()
                 .padding(.top, 40)
             
-            Text("Enter your email address below. We will send you instructions to reset your password.")
+            Text("Enter the email address for your account, and we'll send you a password reset instructions.")
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
+                .foregroundColor(.gray)
             
             // Email TextField
             TextField("Email", text: $email)
@@ -49,7 +50,7 @@ struct ForgotPasswordView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color(red: 1.0, green: 0.65980, blue: 0))
                     .cornerRadius(8)
             }
             .padding(.horizontal, 30)
@@ -66,6 +67,18 @@ struct ForgotPasswordView: View {
         }, message: {
             Text("A password reset email has been sent to \(email).")
         })
+        .navigationBarBackButtonHidden(true) // Hide the default back button
+        .toolbar {
+            // Custom back button in the navigation bar leading position.
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss() // Dismiss the view
+                }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.gray) // Adjust color as desired
+                }
+            }
+        }
     }
     
     // Validate the email and simulate sending a reset email.
