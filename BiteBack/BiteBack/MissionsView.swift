@@ -29,15 +29,13 @@ struct MissionCard: View {
     let mission: Mission
     
     var body: some View {
-        HStack(alignment: .center, spacing: 3) {  // Changed alignment to .center
+        HStack(alignment: .center, spacing: 3) {
             // Left side: Text information
             VStack(alignment: .leading, spacing: 5) {
-                // Mission title
                 Text(mission.title)
                     .font(.headline)
                     .foregroundColor(.white)
                 
-                // Mission description
                 Text(mission.description)
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.9))
@@ -45,7 +43,6 @@ struct MissionCard: View {
                 
                 Spacer()
                 
-                // Reward tag at the bottom
                 HStack {
                     Text(mission.reward)
                         .font(.caption)
@@ -56,16 +53,15 @@ struct MissionCard: View {
                     Spacer()
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .top)  // Keep text top-aligned
+            .frame(maxHeight: .infinity, alignment: .top)
             
-            Spacer()  // Pushes the image to the right edge
+            Spacer()
             
-            // Right side: Image (if available)
             if let imageName = mission.imageName, !imageName.isEmpty {
                 Image(imageName)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 120, height: 100)  // Adjust these values as needed
+                    .frame(width: 120, height: 100)
                     .clipped()
                     .cornerRadius(8)
             }
@@ -75,77 +71,81 @@ struct MissionCard: View {
         .background(Color(red: 1.0, green: 0.65980, blue: 0))
         .cornerRadius(20)
         .shadow(radius: 5)
-
-        
     }
 }
 
-
 // MARK: - Missions Page View
+
 struct MissionsPageView: View {
+    // Use the dismiss environment value to pop this view.
+    @Environment(\.dismiss) var dismiss
+
     // User's name and the list of restaurants (with their missions) are passed in.
     let userName: String
     let restaurants: [Restaurant]
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 30) {
-                    
-                    // Extra space between the navigation title and the subheading.
-                    
-                    // Grey subheading text for Missions.
-                    Text("Welcome back, Brian. Let's do some missions!")
-                        .font(.headline)
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                    
-                    // List of restaurants with their missions.
-                    ForEach(restaurants) { restaurant in
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(restaurant.name)
-                                .font(.title2)
-                                .bold()
-                                .padding(.bottom, 4)
-                            
-                            // Horizontal scroll for each restaurant's missions.
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
-                                    ForEach(restaurant.missions) { mission in
-                                        MissionCard(mission: mission)
-                                    }
+        ScrollView {
+            VStack(spacing: 30) {
+                
+                // Subheading text.
+                Text("Welcome back, \(userName). Let's do some missions!")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                
+                // List of restaurants with their missions.
+                ForEach(restaurants) { restaurant in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(restaurant.name)
+                            .font(.title2)
+                            .bold()
+                            .padding(.bottom, 4)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(restaurant.missions) { mission in
+                                    MissionCard(mission: mission)
                                 }
                             }
                         }
-                        .padding(.horizontal)
                     }
-                    
-                    Spacer() // Pushes content toward the top
+                    .padding(.horizontal)
+                }
+                
+                Spacer() // Pushes content toward the top.
+            }
+        }
+        .navigationTitle("Missions")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)  // Hide the default back button.
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "arrow.left")
+                        .foregroundColor(.gray)
                 }
             }
-            .navigationTitle("Missions")
         }
     }
 }
-
 
 // MARK: - Preview
 
 struct MissionsPageView_Previews: PreviewProvider {
     static var previews: some View {
-        // Sample mission data for multiple restaurants
+        // Sample mission data for multiple restaurants.
         let sampleMissions1 = [
             Mission(title: "Try Our Taco",
                     description: "Order our famous taco dish to earn a free appetizer.",
                     reward: "Free Appetizer",
-                    imageName: "taco"),  // <-- This uses your taco.jpg asset.
+                    imageName: "taco"),
             Mission(title: "Bring a Friend",
                     description: "Bring a friend along and get 20% off your meal.",
                     reward: "20% Off",
                     imageName: "food2")
         ]
-
         
         let sampleMissions2 = [
             Mission(title: "Happy Hour",
@@ -173,6 +173,9 @@ struct MissionsPageView_Previews: PreviewProvider {
         let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
         let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
         
-        MissionsPageView(userName: "Brian", restaurants: [restaurant1, restaurant2, restaurant3])
+        NavigationStack {
+            MissionsPageView(userName: "Brian", restaurants: [restaurant1, restaurant2, restaurant3])
+        }
     }
 }
+

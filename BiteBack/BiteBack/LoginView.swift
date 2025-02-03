@@ -14,6 +14,9 @@ struct LoginView: View {
     @State private var errorMessage: String = ""
     @State private var showPassword: Bool = false  // Controls whether password is visible
     
+    // Navigation state variable for Missions page.
+    @State private var navigateToMissions: Bool = false
+    
     var body: some View {
         VStack(spacing: 30) {
             Image("bitebacklogo")
@@ -43,11 +46,9 @@ struct LoginView: View {
             
             // Password Field Container Using ZStack
             ZStack {
-                // SecureField for obscured password
                 SecureField("Password", text: $password)
                     .textContentType(.password)
                     .opacity(showPassword ? 0 : 1)
-                // TextField for visible password
                 TextField("Password", text: $password)
                     .textContentType(.password)
                     .opacity(showPassword ? 1 : 0)
@@ -78,7 +79,6 @@ struct LoginView: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.top, -20)
             
-            
             // Log In Button
             Button(action: {
                 loginUser()
@@ -92,7 +92,7 @@ struct LoginView: View {
             }
             .padding(.top, 10)
             
-            // Error Message Area with Fixed Height to Reserve Space
+            // Error Message Area with Fixed Height
             Group {
                 if !errorMessage.isEmpty {
                     Text(errorMessage)
@@ -115,7 +115,15 @@ struct LoginView: View {
                 .contentShape(Rectangle())
             }
             
-            Spacer() // Pushes content to the top
+            Spacer()
+            
+            // Hidden NavigationLink that triggers navigation to MissionsPageView.
+            NavigationLink(
+                destination: MissionsPageView(userName: "Test User", restaurants: sampleRestaurants),
+                isActive: $navigateToMissions
+            ) {
+                EmptyView()
+            }
         }
         .padding(30)
     }
@@ -128,27 +136,68 @@ struct LoginView: View {
             errorMessage = "Please enter both email and password."
             return
         }
-        
         // Validate email format.
         guard email.isValidEmail else {
             errorMessage = "Please enter a valid email address."
             return
         }
-        
-        // Validate password length (e.g., minimum 6 characters).
+        // Validate password length.
         guard password.count >= 6 else {
             errorMessage = "Password must be at least 6 characters."
             return
         }
         
-        // If all validation passes, clear the error and continue.
-        errorMessage = ""
-        print("User logged in with email: \(email)")
-        // Continue with your authentication logic…
+        // Check for the specific test credentials.
+        if email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "test@test.com" && password == "test1234" {
+            errorMessage = ""
+            print("User logged in with email: \(email)")
+            navigateToMissions = true
+        } else {
+            errorMessage = "Invalid credentials."
+        }
+    }
+    
+    // MARK: - Sample Data for MissionsPageView
+    var sampleRestaurants: [Restaurant] {
+        let sampleMissions1 = [
+            Mission(title: "Try Our Taco",
+                    description: "Order our famous taco dish to earn a free appetizer.",
+                    reward: "Free Appetizer",
+                    imageName: "taco"),
+            Mission(title: "Bring a Friend",
+                    description: "Bring a friend along and get 20% off your meal.",
+                    reward: "20% Off",
+                    imageName: "food2")
+        ]
+        let sampleMissions2 = [
+            Mission(title: "Happy Hour",
+                    description: "Join our happy hour to enjoy special discounts.",
+                    reward: "Discounted Drinks",
+                    imageName: "cocktail"),
+            Mission(title: "Loyalty Challenge",
+                    description: "Visit 5 times this month to earn a free meal.",
+                    reward: "Free Meal",
+                    imageName: "food4")
+        ]
+        let sampleMissions3 = [
+            Mission(title: "Family Fiesta",
+                    description: "Bring your family and dine together for a special discount.",
+                    reward: "Family Discount",
+                    imageName: "sushi"),
+            Mission(title: "Weekend Special",
+                    description: "Dine during the weekend to earn bonus rewards.",
+                    reward: "Bonus Rewards",
+                    imageName: "food6")
+        ]
+        
+        let restaurant1 = Restaurant(name: "Oscars Taco Shop", missions: sampleMissions1)
+        let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
+        let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
+        
+        return [restaurant1, restaurant2, restaurant3]
     }
 }
 
-// MARK: - Preview Provider
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {

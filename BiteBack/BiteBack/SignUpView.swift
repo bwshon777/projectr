@@ -35,12 +35,14 @@ struct SignUpView: View {
     @State private var acceptedTerms: Bool = false
     @State private var errorMessage: String = ""
     
+    // Navigation state variable.
+    @State private var navigateToMissions: Bool = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 headerView
                 formFields
-                // Only show the business verification toggle when in Business mode.
                 if selectedMode == .business {
                     businessVerificationToggle
                 }
@@ -53,8 +55,16 @@ struct SignUpView: View {
                 }
                 
                 Spacer()
+                
+                // Hidden NavigationLink that navigates to MissionsPageView when activated.
+                NavigationLink(
+                    destination: MissionsPageView(userName: personalName.isEmpty ? "User" : personalName, restaurants: sampleRestaurants),
+                    isActive: $navigateToMissions
+                ) {
+                    EmptyView()
+                }
             }
-            .padding(30) // Matches the LoginView overall padding.
+            .padding(30)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -71,7 +81,6 @@ struct SignUpView: View {
     // MARK: - Header View
     var headerView: some View {
         VStack(spacing: 30) {
-            // Header text left aligned.
             VStack(alignment: .leading, spacing: 10) {
                 Text("Sign Up")
                     .font(.title2)
@@ -80,8 +89,7 @@ struct SignUpView: View {
                     .foregroundColor(.gray)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-
-            // Center the segmented control (slider) horizontally.
+            
             HStack {
                 Spacer()
                 Picker("", selection: $selectedMode) {
@@ -211,6 +219,7 @@ struct SignUpView: View {
                 return
             }
             print("Personal user signed up: \(personalName), email: \(personalEmail)")
+            navigateToMissions = true
         } else {
             guard !businessName.trimmingCharacters(in: .whitespaces).isEmpty,
                   !businessEmail.trimmingCharacters(in: .whitespaces).isEmpty,
@@ -232,7 +241,48 @@ struct SignUpView: View {
                 return
             }
             print("Business user signed up: \(businessName), email: \(businessEmail), verify: \(verifyBusiness)")
+            navigateToMissions = true
         }
+    }
+    
+    // MARK: - Sample Data for MissionsPageView
+    var sampleRestaurants: [Restaurant] {
+        let sampleMissions1 = [
+            Mission(title: "Try Our Taco",
+                    description: "Order our famous taco dish to earn a free appetizer.",
+                    reward: "Free Appetizer",
+                    imageName: "taco"),
+            Mission(title: "Bring a Friend",
+                    description: "Bring a friend along and get 20% off your meal.",
+                    reward: "20% Off",
+                    imageName: "food2")
+        ]
+        let sampleMissions2 = [
+            Mission(title: "Happy Hour",
+                    description: "Join our happy hour to enjoy special discounts.",
+                    reward: "Discounted Drinks",
+                    imageName: "cocktail"),
+            Mission(title: "Loyalty Challenge",
+                    description: "Visit 5 times this month to earn a free meal.",
+                    reward: "Free Meal",
+                    imageName: "food4")
+        ]
+        let sampleMissions3 = [
+            Mission(title: "Family Fiesta",
+                    description: "Bring your family and dine together for a special discount.",
+                    reward: "Family Discount",
+                    imageName: "sushi"),
+            Mission(title: "Weekend Special",
+                    description: "Dine during the weekend to earn bonus rewards.",
+                    reward: "Bonus Rewards",
+                    imageName: "food6")
+        ]
+        
+        let restaurant1 = Restaurant(name: "Oscars Taco Shop", missions: sampleMissions1)
+        let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
+        let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
+        
+        return [restaurant1, restaurant2, restaurant3]
     }
 }
 
