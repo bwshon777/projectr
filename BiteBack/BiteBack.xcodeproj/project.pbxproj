@@ -11,6 +11,8 @@
 		4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F09522D50716400C143B0 /* Preview Assets.xcassets */; };
 		4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09602D50744900C143B0 /* BiteBackApp.swift */; };
 		4B1F09652D50748700C143B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09642D50748700C143B0 /* ContentView.swift */; };
+		4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09662D507BA300C143B0 /* LoginView.swift */; };
+		4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09682D507BB900C143B0 /* SignUpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		4B1F095F2D50744800C143B0 /* BiteBack-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BiteBack-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B1F09602D50744900C143B0 /* BiteBackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiteBackApp.swift; sourceTree = "<group>"; };
 		4B1F09642D50748700C143B0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		4B1F09662D507BA300C143B0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		4B1F09682D507BB900C143B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
 				4B1F095F2D50744800C143B0 /* BiteBack-Bridging-Header.h */,
 				4B1F09642D50748700C143B0 /* ContentView.swift */,
+				4B1F09662D507BA300C143B0 /* LoginView.swift */,
+				4B1F09682D507BB900C143B0 /* SignUpView.swift */,
 			);
 			path = BiteBack;
 			sourceTree = "<group>";
@@ -140,6 +146,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */,
+				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
 				4B1F09652D50748700C143B0 /* ContentView.swift in Sources */,
 				4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */,
 			);
