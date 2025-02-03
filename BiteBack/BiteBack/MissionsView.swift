@@ -72,16 +72,11 @@ struct MissionCard: View {
         }
         .padding()
         .frame(width: 300, height: 160)
-        .background(
-            // A gradient background to make the card pop.
-            LinearGradient(
-                gradient: Gradient(colors: [Color.orange, Color.red]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(16)
+        .background(Color(red: 1.0, green: 0.65980, blue: 0))
+        .cornerRadius(20)
         .shadow(radius: 5)
+
+        
     }
 }
 
@@ -100,7 +95,7 @@ struct MissionsPageView: View {
                     // Extra space between the navigation title and the subheading.
                     
                     // Grey subheading text for Missions.
-                    Text("Welcome back, Brian. Let's do some missions.")
+                    Text("Welcome back, Brian. Let's do some missions!")
                         .font(.headline)
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -167,7 +162,7 @@ struct MissionsPageView_Previews: PreviewProvider {
             Mission(title: "Family Fiesta",
                     description: "Bring your family and dine together for a special discount.",
                     reward: "Family Discount",
-                    imageName: "food5"),
+                    imageName: "sushi"),
             Mission(title: "Weekend Special",
                     description: "Dine during the weekend to earn bonus rewards.",
                     reward: "Bonus Rewards",
