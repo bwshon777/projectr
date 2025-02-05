@@ -6,16 +6,23 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+
+// Enum to track which text field is focused.
+enum LoginField: Hashable {
+    case email, password
+}
 
 struct LoginView: View {
-    // Bindings for text fields and password visibility toggle
+    // MARK: - State Properties
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var errorMessage: String = ""
-    @State private var showPassword: Bool = false  // Controls whether password is visible
+    @State private var showPassword: Bool = false
+    @State private var navigateToMissions: Bool = false // trigger here
     
-    // Navigation state variable for Missions page.
-    @State private var navigateToMissions: Bool = false
+    // Focus state for text fields (for keyboard stuff)
+    @FocusState private var focusedField: LoginField?
     
     var body: some View {
         VStack(spacing: 30) {
@@ -26,7 +33,7 @@ struct LoginView: View {
                 .padding(.top, 80)
                 .padding(.bottom, 20)
             
-            // Title and subtitle, left-aligned with the input fields
+            // Title and subtitle
             VStack(alignment: .leading, spacing: 10) {
                 Text("Login")
                     .font(.largeTitle)
@@ -43,26 +50,26 @@ struct LoginView: View {
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(8)
+                .focused($focusedField, equals: .email)
             
-            // Password Field Container Using ZStack
+            // Password Field Container
             ZStack {
                 SecureField("Password", text: $password)
                     .textContentType(.password)
                     .opacity(showPassword ? 0 : 1)
+                    .focused($focusedField, equals: .password)
                 TextField("Password", text: $password)
                     .textContentType(.password)
                     .opacity(showPassword ? 1 : 0)
+                    .focused($focusedField, equals: .password)
             }
             .padding()
             .background(Color(.systemGray6))
             .cornerRadius(8)
-            // Overlay the toggle button on the right side.
             .overlay(
                 HStack {
                     Spacer()
-                    Button(action: {
-                        showPassword.toggle()
-                    }) {
+                    Button(action: { showPassword.toggle() }) {
                         Image(systemName: showPassword ? "eye.slash" : "eye")
                             .foregroundColor(.gray)
                     }
@@ -70,29 +77,27 @@ struct LoginView: View {
                 }
             )
             
-            // NavigationLink for "Forgot Password"
+            // "Forgot Password" NavigationLink
             NavigationLink(destination: ForgotPasswordView()) {
                 Text("Forgot Password?")
                     .font(.subheadline)
-                    .foregroundColor(Color(red: 1.0, green: 0.65980, blue: 0))
+                    .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.top, -20)
             
             // Log In Button
-            Button(action: {
-                loginUser()
-            }) {
+            Button(action: { loginUser() }) {
                 Text("Log In")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color(red: 1.0, green: 0.65980, blue: 0))
+                    .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                     .cornerRadius(8)
             }
             .padding(.top, 10)
             
-            // Error Message Area with Fixed Height
+            // Error Message Area (fixed height)
             Group {
                 if !errorMessage.isEmpty {
                     Text(errorMessage)
@@ -103,13 +108,13 @@ struct LoginView: View {
             }
             .frame(height: 20)
             
-            // Navigation Link to the Sign-Up screen.
+            // NavigationLink to Sign-Up screen.
             NavigationLink(destination: SignUpView()) {
                 HStack(spacing: 4) {
                     Text("Don't have an account?")
                         .foregroundColor(.gray)
                     Text("Sign up")
-                        .foregroundColor(Color(red: 1.0, green: 0.65980, blue: 0))
+                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                 }
                 .padding(.top, 10)
                 .contentShape(Rectangle())
@@ -117,7 +122,7 @@ struct LoginView: View {
             
             Spacer()
             
-            // Hidden NavigationLink that triggers navigation to MissionsPageView.
+            // Hidden NavigationLink, triggers navigation to MissionsPageView.
             NavigationLink(
                 destination: MissionsPageView(userName: "Test User", restaurants: sampleRestaurants),
                 isActive: $navigateToMissions
@@ -126,34 +131,38 @@ struct LoginView: View {
             }
         }
         .padding(30)
+        // Dismiss keyboard when tapping anywhere outside.
+        .onTapGesture { focusedField = nil }
     }
     
     // MARK: - Login Validation Function
     func loginUser() {
-        // Validate non-empty fields.
+        // Validate inputs same as above
         guard !email.trimmingCharacters(in: .whitespaces).isEmpty,
               !password.isEmpty else {
             errorMessage = "Please enter both email and password."
             return
         }
-        // Validate email format.
         guard email.isValidEmail else {
             errorMessage = "Please enter a valid email address."
             return
         }
-        // Validate password length.
         guard password.count >= 6 else {
             errorMessage = "Password must be at least 6 characters."
             return
         }
         
-        // Check for the specific test credentials.
-        if email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "test@test.com" && password == "test1234" {
+        // Authenticate using Firebase.
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            if let error = error {
+                errorMessage = error.localizedDescription
+                return
+            }
+            
+            // Successful login
             errorMessage = ""
             print("User logged in with email: \(email)")
-            navigateToMissions = true
-        } else {
-            errorMessage = "Invalid credentials."
+            navigateToMissions = true  // Trigger navigation to MissionsPageView.
         }
     }
     

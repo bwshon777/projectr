@@ -6,11 +6,19 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 enum SignUpMode: String, CaseIterable, Identifiable {
     case personal = "Personal"
     case business = "Business"
     var id: String { self.rawValue }
+}
+
+// Enum for all text fields in SignUpView.
+enum SignUpField: Hashable {
+    case personalName, personalEmail, personalPhone, personalPassword
+    case businessName, businessEmail, businessPhone, businessPassword
 }
 
 struct SignUpView: View {
@@ -38,6 +46,9 @@ struct SignUpView: View {
     // Navigation state variable.
     @State private var navigateToMissions: Bool = false
     
+    // Focus state for sign-up fields.
+    @FocusState private var focusedField: SignUpField?
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -56,7 +67,6 @@ struct SignUpView: View {
                 
                 Spacer()
                 
-                // Hidden NavigationLink that navigates to MissionsPageView when activated.
                 NavigationLink(
                     destination: MissionsPageView(userName: personalName.isEmpty ? "User" : personalName, restaurants: sampleRestaurants),
                     isActive: $navigateToMissions
@@ -66,6 +76,8 @@ struct SignUpView: View {
             }
             .padding(30)
         }
+        // Dismiss the keyboard when tapping outside. [TODO]
+        .onTapGesture { focusedField = nil }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -113,41 +125,49 @@ struct SignUpView: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .personalName)
                 TextField("Email", text: $personalEmail)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .personalEmail)
                 TextField("Phone", text: $personalPhone)
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .personalPhone)
                 SecureField("Password", text: $personalPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .personalPassword)
             } else {
                 TextField("Business Name", text: $businessName)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .businessName)
                 TextField("Email", text: $businessEmail)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .businessEmail)
                 TextField("Phone", text: $businessPhone)
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .businessPhone)
                 SecureField("Password", text: $businessPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    .focused($focusedField, equals: .businessPassword)
             }
         }
     }
@@ -168,7 +188,7 @@ struct SignUpView: View {
                 NavigationLink(destination: TermsAndConditionsView(accepted: $acceptedTerms)) {
                     Text("Terms and Conditions")
                         .underline()
-                        .foregroundColor(Color(red: 1.0, green: 0.65980, blue: 0))
+                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                 }
             }
         }
@@ -184,7 +204,7 @@ struct SignUpView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(red: 1.0, green: 0.65980, blue: 0))
+                .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                 .cornerRadius(8)
         }
         .padding(.top, 10)
@@ -198,50 +218,49 @@ struct SignUpView: View {
         }
         errorMessage = ""
         
-        if selectedMode == .personal {
-            guard !personalName.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !personalEmail.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !personalPhone.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !personalPassword.isEmpty else {
-                errorMessage = "Please fill in all fields."
+        // Choose fields based on selected mode.
+        let emailToUse = selectedMode == .personal ? personalEmail : businessEmail
+        let passwordToUse = selectedMode == .personal ? personalPassword : businessPassword
+        
+        // Create user in Firebase Auth.
+        Auth.auth().createUser(withEmail: emailToUse, password: passwordToUse) { authResult, error in
+            if let error = error {
+                errorMessage = error.localizedDescription
                 return
             }
-            guard personalEmail.isValidEmail else {
-                errorMessage = "Please enter a valid email address."
-                return
+            
+            let db = Firestore.firestore()
+            let userData: [String: Any] = {
+                if selectedMode == .personal {
+                    return [
+                        "name": personalName,
+                        "email": personalEmail,
+                        "phone": personalPhone,
+                        "mode": "personal"
+                    ]
+                } else {
+                    return [
+                        "businessName": businessName,
+                        "email": businessEmail,
+                        "phone": businessPhone,
+                        "verifyBusiness": verifyBusiness,
+                        "mode": "business"
+                    ]
+                }
+            }()
+            
+            if let uid = authResult?.user.uid {
+                db.collection("users").document(uid).setData(userData) { err in
+                    if let err = err {
+                        print("Error writing user data: \(err)")
+                    } else {
+                        print("User data successfully written!")
+                    }
+                }
             }
-            guard personalPhone.allSatisfy({ $0.isNumber }) else {
-                errorMessage = "Phone number should contain only digits."
-                return
-            }
-            guard personalPassword.count >= 6 else {
-                errorMessage = "Password must be at least 6 characters."
-                return
-            }
-            print("Personal user signed up: \(personalName), email: \(personalEmail)")
-            navigateToMissions = true
-        } else {
-            guard !businessName.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !businessEmail.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !businessPhone.trimmingCharacters(in: .whitespaces).isEmpty,
-                  !businessPassword.isEmpty else {
-                errorMessage = "Please fill in all fields."
-                return
-            }
-            guard businessEmail.isValidEmail else {
-                errorMessage = "Please enter a valid email address."
-                return
-            }
-            guard businessPhone.allSatisfy({ $0.isNumber }) else {
-                errorMessage = "Phone number should contain only digits."
-                return
-            }
-            guard businessPassword.count >= 6 else {
-                errorMessage = "Password must be at least 6 characters."
-                return
-            }
-            print("Business user signed up: \(businessName), email: \(businessEmail), verify: \(verifyBusiness)")
-            navigateToMissions = true
+            
+            // After successful sign up, redirect to the login page.
+            dismiss()
         }
     }
     
@@ -293,3 +312,4 @@ struct SignUpView_Previews: PreviewProvider {
         }
     }
 }
+

@@ -33,7 +33,7 @@ struct TermsAndConditionsView: View {
                 dismiss()
             }
             .padding()
-            .foregroundColor(Color(red: 1.0, green: 0.65980, blue: 0))
+            .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
         }
         .navigationTitle("Terms & Conditions")
         .navigationBarTitleDisplayMode(.inline)
