@@ -1,23 +1,12 @@
-//
-//  MissionsView.swift
-//  BiteBack
-//
-//  Created by Nicholas Pacella on 2/2/25.
-//
-
-// Backend stuff 
-// Created by Utsav on 2/16/25
-
 import SwiftUI
-
-import FirebaseCore  // back end imports
+import FirebaseCore
 import FirebaseFirestore
-
+import FirebaseAuth
 
 // MARK: - Data Models
 
 struct Mission: Identifiable {
-    let id = String // Firestore-generated ID
+    let id: String // Firestore-generated ID
     let title: String
     let description: String
     let reward: String
@@ -25,9 +14,9 @@ struct Mission: Identifiable {
 }
 
 struct Restaurant: Identifiable {
-    let id = String // Firestore-generated ID
+    let id: String // Firestore-generated ID
     let name: String
-    let missions: [Mission]
+    var missions: [Mission]
 }
 
 // MARK: - Mission Card View
@@ -36,8 +25,7 @@ struct MissionCard: View {
     let mission: Mission
     
     var body: some View {
-        HStack(alignment: .center, spacing: 3) {
-            // Left side: Text information
+        HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 5) {
                 Text(mission.title)
                     .font(.headline)
@@ -75,96 +63,97 @@ struct MissionCard: View {
         }
         .padding()
         .frame(width: 300, height: 160)
-        .background(Color(red: 1.0, green: 0.65980, blue: 0))
+        .background(Color.orange)
         .cornerRadius(20)
         .shadow(radius: 5)
     }
 }
 
-// MARK: - Missions Page View Model
-// Updated for Firestore
+// MARK: - ViewModel for Missions
 
 class MissionsViewModel: ObservableObject {
     @Published var restaurants: [Restaurant] = []
-
+    
     init() {
-        FirebaseApp.configure() // Initialize Firebase
+        FirebaseApp.configure()
         fetchRestaurants()
     }
-
+    
     func fetchRestaurants() {
         let db = Firestore.firestore()
         db.collection("restaurants").getDocuments { (querySnapshot, error) in
             if let error = error {
-                print("Error getting restaurants: \(error)") // Log the error!
+                print("Error getting restaurants: \(error)")
                 return
             }
-
+            
             guard let querySnapshot = querySnapshot else { return }
-
-            self.restaurants = querySnapshot.documents.map { document in
-                let restaurantID = document.documentID // Get Firestore ID
+            
+            var fetchedRestaurants: [Restaurant] = []
+            
+            for document in querySnapshot.documents {
+                let restaurantID = document.documentID
                 let data = document.data()
                 let name = data["name"] as? String ?? ""
-
-                let missionsCollection = document.reference.collection("missions")
-                missionsCollection.getDocuments { (missionsSnapshot, missionsError) in
+                
+                let restaurant = Restaurant(id: restaurantID, name: name, missions: [])
+                fetchedRestaurants.append(restaurant)
+                
+                document.reference.collection("missions").getDocuments { (missionsSnapshot, missionsError) in
                     if let missionsError = missionsError {
-                        print("Error getting missions: \(missionsError)") // Log the error!
+                        print("Error getting missions: \(missionsError)")
                         return
                     }
-
-                    let missions = missionsSnapshot?.documents.map { missionDocument in
-                        let missionData = missionDocument.data()
+                    
+                    let missions = missionsSnapshot?.documents.map { missionDoc in
+                        let missionData = missionDoc.data()
                         return Mission(
-                            id: missionDocument.documentID, // Get Firestore ID
+                            id: missionDoc.documentID,
                             title: missionData["title"] as? String ?? "",
                             description: missionData["description"] as? String ?? "",
                             reward: missionData["reward"] as? String ?? "",
-                            imageURL: missionData["imageURL"] as? String ?? "" // Get image URL
+                            imageName: missionData["imageName"] as? String ?? ""
                         )
                     } ?? []
-
-                    DispatchQueue.main.async { // Update on main thread
-                        if let index = self.restaurants.firstIndex(where: { $0.id == restaurantID }) {
-                            self.restaurants[index].missions = missions
+                    
+                    DispatchQueue.main.async {
+                        if let index = fetchedRestaurants.firstIndex(where: { $0.id == restaurantID }) {
+                            fetchedRestaurants[index].missions = missions
                         }
+                        self.restaurants = fetchedRestaurants
                     }
                 }
-
-                return Restaurant(id: restaurantID, name: name, missions: []) // Initialize with empty missions
             }
         }
     }
 }
 
-// MARK: - Missions Page View (Slightly Modified)
+// MARK: - Missions Page View
 
 struct MissionsPageView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var viewModel = MissionsViewModel() // Use the view model
+    @StateObject var viewModel = MissionsViewModel()
     let userName: String
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
-                // 
-                // Subheading text.
                 Text("Welcome back, \(userName). Let's do some missions!")
                     .font(.headline)
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
-                ForEach(viewModel.restaurants) { restaurant in // Iterate through restaurants
+                
+                ForEach(viewModel.restaurants) { restaurant in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(restaurant.name)
                             .font(.title2)
                             .bold()
                             .padding(.bottom, 4)
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                ForEach(restaurant.missions) { mission in // Iterate through missions
+                                ForEach(restaurant.missions) { mission in
                                     MissionCard(mission: mission)
                                 }
                             }
@@ -172,19 +161,16 @@ struct MissionsPageView: View {
                     }
                     .padding(.horizontal)
                 }
-
                 Spacer()
             }
         }
-        // ... (Your navigation code)
-         .navigationTitle("Missions")
+        .navigationTitle("Missions")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)  // Hide the default back button.
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: { dismiss() }) {
                     Image(systemName: "arrow.left")
-            
                         .foregroundColor(.gray)
                 }
             }
@@ -192,19 +178,24 @@ struct MissionsPageView: View {
     }
 }
 
+// MARK: - User Session Persistence
 
-// MARK: - Preview (For now, use sample data to check layout)
+func checkUserSession() -> Bool {
+    return Auth.auth().currentUser != nil
+}
+
+// MARK: - Preview
 
 struct MissionsPageView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleMissions1 = [
-            Mission(id: UUID().uuidString, title: "Try Our Taco", description: "...", reward: "...", imageURL: "taco"),
-            Mission(id: UUID().uuidString, title: "Bring a Friend", description: "...", reward: "...", imageURL: "food2")
+        let sampleMissions = [
+            Mission(id: UUID().uuidString, title: "Try Our Taco", description: "...", reward: "...", imageName: "taco"),
+            Mission(id: UUID().uuidString, title: "Bring a Friend", description: "...", reward: "...", imageName: "food2")
         ]
-        let restaurant1 = Restaurant(id: UUID().uuidString, name: "Oscars Taco Shop", missions: sampleMissions1)
-
+        let restaurant = Restaurant(id: UUID().uuidString, name: "Oscar's Taco Shop", missions: sampleMissions)
+        
         NavigationStack {
-            MissionsPageView(userName: "Brian", restaurants: [restaurant1])
+            MissionsPageView(userName: "Brian")
         }
     }
 }
