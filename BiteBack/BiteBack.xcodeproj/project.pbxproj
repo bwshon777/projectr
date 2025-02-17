@@ -18,6 +18,7 @@
 		4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */; };
 		4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */; };
 		4B1F09732D517ADF00C143B0 /* CheckToggleboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */; };
+		4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */; };
 		4BC8AEFF2D52A5F700C66F15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */; };
 		4BC8AF022D52A69400C66F15 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF012D52A69400C66F15 /* FirebaseAnalytics */; };
 		4BC8AF042D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF032D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -59,6 +60,7 @@
 		4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckToggleboxStyle.swift; sourceTree = "<group>"; };
+		4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
 		4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +131,7 @@
 				4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */,
 				4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */,
 				4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */,
+				4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */,
 			);
 			path = BiteBack;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 			files = (
 				4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */,
 				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
+				4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */,
 				010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */,
 				4B1F09652D50748700C143B0 /* ContentView.swift in Sources */,
 				4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */,

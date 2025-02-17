@@ -43,8 +43,9 @@ struct SignUpView: View {
     @State private var acceptedTerms: Bool = false
     @State private var errorMessage: String = ""
     
-    // Navigation state variable.
+    // Navigation state variables.
     @State private var navigateToMissions: Bool = false
+    @State private var navigateToBusinessProfile: Bool = false
     
     // Focus state for sign-up fields.
     @FocusState private var focusedField: SignUpField?
@@ -67,8 +68,12 @@ struct SignUpView: View {
                 
                 Spacer()
                 
+                // Hidden NavigationLink for Personal sign-up: navigates to MissionsPageView.
                 NavigationLink(
-                    destination: MissionsPageView(userName: personalName.isEmpty ? "User" : personalName, restaurants: sampleRestaurants),
+                    destination: MissionsPageView(
+                        userName: personalName.isEmpty ? "User" : personalName,
+                        restaurants: sampleRestaurants
+                    ),
                     isActive: $navigateToMissions
                 ) {
                     EmptyView()
@@ -76,7 +81,7 @@ struct SignUpView: View {
             }
             .padding(30)
         }
-        // Dismiss the keyboard when tapping outside. [TODO]
+        // Dismiss the keyboard when tapping outside.
         .onTapGesture { focusedField = nil }
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -229,6 +234,7 @@ struct SignUpView: View {
                 return
             }
             
+            // Save additional user info in Firestore.
             let db = Firestore.firestore()
             let userData: [String: Any] = {
                 if selectedMode == .personal {
@@ -259,8 +265,14 @@ struct SignUpView: View {
                 }
             }
             
-            // After successful sign up, redirect to the login page.
-            dismiss()
+            // After successful sign-up, redirect based on user type.
+            if selectedMode == .business {
+                // For business users, navigate to BusinessProfileView.
+                navigateToBusinessProfile = true
+            } else {
+                // For personal users, simply dismiss to return to the login page.
+                dismiss()
+            }
         }
     }
     
@@ -312,4 +324,3 @@ struct SignUpView_Previews: PreviewProvider {
         }
     }
 }
-
