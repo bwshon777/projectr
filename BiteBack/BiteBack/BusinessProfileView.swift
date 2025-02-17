@@ -43,7 +43,7 @@ struct BusinessProfileView: View {
                         .cornerRadius(8)
                 }
                 
-                NavigationLink(destination: CreateMissionsView()) {
+                NavigationLink(destination: AddMissionView()) {
                     Text("Create Missions")
                         .font(.headline)
                         .foregroundColor(.white)
