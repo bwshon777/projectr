@@ -104,7 +104,6 @@
 		4B1F093F2D50716300C143B0 = {
 			isa = PBXGroup;
 			children = (
-				4BB210432D55458100920807 /* CardStruct.swift */,
 				4B1F094A2D50716300C143B0 /* BiteBack */,
 				4B1F09492D50716300C143B0 /* Products */,
 			);
@@ -121,6 +120,7 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
+				4BB210432D55458100920807 /* CardStruct.swift */,
 				4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
