@@ -7,6 +7,8 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
+import PhotosUI  // For Image Picker
 
 struct AddMissionView: View {
     @State private var restaurantName: String = ""
@@ -14,6 +16,8 @@ struct AddMissionView: View {
     @State private var description: String = ""
     @State private var reward: String = ""
     @State private var expiration: String = ""
+    @State private var selectedImage: UIImage?
+    @State private var isImagePickerPresented = false
 
     var body: some View {
         NavigationView {
@@ -21,12 +25,25 @@ struct AddMissionView: View {
                 Section(header: Text("Restaurant Details")) {
                     TextField("Restaurant Name", text: $restaurantName)
                 }
-                
+
                 Section(header: Text("Mission Details")) {
                     TextField("Title", text: $title)
                     TextField("Description", text: $description)
                     TextField("Reward", text: $reward)
                     TextField("Expiration Date (YYYY-MM-DD)", text: $expiration)
+                }
+
+                Section(header: Text("Upload Image")) {
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 150)
+                    }
+
+                    Button("Select Image") {
+                        isImagePickerPresented.toggle()
+                    }
                 }
 
                 Button(action: addMission) {
@@ -37,9 +54,12 @@ struct AddMissionView: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
-                .disabled(restaurantName.isEmpty || title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty)
+                .disabled(restaurantName.isEmpty || title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty || selectedImage == nil)
             }
             .navigationTitle("Create a Mission")
+            .sheet(isPresented: $isImagePickerPresented) {
+                ImagePicker(image: $selectedImage)
+            }
         }
     }
 
@@ -47,7 +67,6 @@ struct AddMissionView: View {
         let db = Firestore.firestore()
         let restaurantRef = db.collection("restaurants")
 
-        // Query Firestore to check if the restaurant already exists
         restaurantRef.whereField("name", isEqualTo: restaurantName).getDocuments { (snapshot, error) in
             if let error = error {
                 print("Error checking restaurant: \(error.localizedDescription)")
@@ -55,25 +74,46 @@ struct AddMissionView: View {
             }
 
             if let snapshot = snapshot, !snapshot.documents.isEmpty {
-                // Restaurant exists, use its document ID
                 let existingRestaurantId = snapshot.documents.first!.documentID
-                addMissionToRestaurant(restaurantId: existingRestaurantId)
+                uploadImage(restaurantId: existingRestaurantId)
             } else {
-                // Restaurant does not exist, create it first
                 let newRestaurantRef = restaurantRef.document()
                 newRestaurantRef.setData(["name": restaurantName]) { error in
                     if let error = error {
                         print("Error creating restaurant: \(error.localizedDescription)")
                     } else {
                         print("New restaurant created!")
-                        addMissionToRestaurant(restaurantId: newRestaurantRef.documentID)
+                        uploadImage(restaurantId: newRestaurantRef.documentID)
                     }
                 }
             }
         }
     }
 
-    func addMissionToRestaurant(restaurantId: String) {
+    func uploadImage(restaurantId: String) {
+        guard let imageData = selectedImage?.jpegData(compressionQuality: 0.8) else { return }
+
+        let storageRef = Storage.storage().reference().child("missions/\(UUID().uuidString).jpg")
+        storageRef.putData(imageData, metadata: nil) { _, error in
+            if let error = error {
+                print("Error uploading image: \(error.localizedDescription)")
+                return
+            }
+
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Error getting image URL: \(error.localizedDescription)")
+                    return
+                }
+
+                if let imageUrl = url?.absoluteString {
+                    addMissionToRestaurant(restaurantId: restaurantId, imageUrl: imageUrl)
+                }
+            }
+        }
+    }
+
+    func addMissionToRestaurant(restaurantId: String, imageUrl: String) {
         let db = Firestore.firestore()
         let missionRef = db.collection("restaurants").document(restaurantId).collection("missions").document()
 
@@ -82,7 +122,8 @@ struct AddMissionView: View {
             "description": description,
             "reward": reward,
             "expiration": expiration,
-            "status": "active"
+            "status": "active",
+            "imageUrl": imageUrl
         ]
 
         missionRef.setData(missionData) { error in
@@ -101,11 +142,45 @@ struct AddMissionView: View {
         description = ""
         reward = ""
         expiration = ""
+        selectedImage = nil
     }
 }
 
-struct AddMissionView_Previews: PreviewProvider {
+// Custom Image Picker
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        var parent: ImagePicker
+
+        init(parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+            picker.dismiss(animated: true)
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+}
+
+struct AddMissionView_Preview: PreviewProvider {
     static var previews: some View {
         AddMissionView()
     }
 }
+
