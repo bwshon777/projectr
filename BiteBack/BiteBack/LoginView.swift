@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 // Enum to track which text field is focused.
 enum LoginField: Hashable {
@@ -20,6 +21,7 @@ struct LoginView: View {
     @State private var errorMessage: String = ""
     @State private var showPassword: Bool = false
     @State private var navigateToMissions: Bool = false // trigger here
+    @State private var navigateToBusinessProfile: Bool = false
     
     // Focus state for text fields (for keyboard stuff)
     @FocusState private var focusedField: LoginField?
@@ -129,6 +131,13 @@ struct LoginView: View {
             ) {
                 EmptyView()
             }
+            
+            NavigationLink(
+                destination: BusinessProfileView(businessLogoName: "image", businessName: "Oscars"),
+                isActive: $navigateToBusinessProfile
+            ) {
+                EmptyView()
+            }
         }
         .padding(30)
         // Dismiss keyboard when tapping anywhere outside.
@@ -137,7 +146,6 @@ struct LoginView: View {
     
     // MARK: - Login Validation Function
     func loginUser() {
-        // Validate inputs same as above
         guard !email.trimmingCharacters(in: .whitespaces).isEmpty,
               !password.isEmpty else {
             errorMessage = "Please enter both email and password."
@@ -152,19 +160,35 @@ struct LoginView: View {
             return
         }
         
-        // Authenticate using Firebase.
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 errorMessage = error.localizedDescription
                 return
             }
             
-            // Successful login
-            errorMessage = ""
-            print("User logged in with email: \(email)")
-            navigateToMissions = true  // Trigger navigation to MissionsPageView.
+            // Successful login. Now fetch additional user data to determine account type.
+            let db = Firestore.firestore()
+            if let uid = authResult?.user.uid {
+                db.collection("users").document(uid).getDocument { document, error in
+                    if let document = document, document.exists, let data = document.data(),
+                       let mode = data["mode"] as? String {
+                        errorMessage = ""
+                        print("User logged in with email: \(email), mode: \(mode)")
+                        if mode == "business" {
+                            // Navigate to BusinessProfileView.
+                            navigateToBusinessProfile = true
+                        } else {
+                            // Navigate to MissionsPageView.
+                            navigateToMissions = true
+                        }
+                    } else {
+                        errorMessage = "Failed to fetch user data."
+                    }
+                }
+            }
         }
     }
+
     
     // MARK: - Sample Data for MissionsPageView
     var sampleRestaurants: [Restaurant] {
