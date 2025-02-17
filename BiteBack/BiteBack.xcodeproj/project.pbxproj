@@ -15,6 +15,12 @@
 		4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09682D507BB900C143B0 /* SignUpView.swift */; };
 		4B1F096B2D507F8400C143B0 /* ValidationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096A2D507F8400C143B0 /* ValidationExtensions.swift */; };
 		4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */; };
+		4B8FC19E2D62E42100D47E67 /* MissionsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC1982D62E42100D47E67 /* MissionsPageViewController.swift */; };
+		4B8FC19F2D62E42100D47E67 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC1992D62E42100D47E67 /* MissionsView.swift */; };
+		4B8FC1A02D62E42100D47E67 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC19A2D62E42100D47E67 /* LoginViewController.swift */; };
+		4B8FC1A12D62E42100D47E67 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC19B2D62E42100D47E67 /* Package.swift */; };
+		4B8FC1A22D62E42100D47E67 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC19C2D62E42100D47E67 /* SignUpViewController.swift */; };
+		4B8FC1A32D62E42100D47E67 /* BusinessDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC19D2D62E42100D47E67 /* BusinessDashboardViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +34,12 @@
 		4B1F09682D507BB900C143B0 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		4B1F096A2D507F8400C143B0 /* ValidationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationExtensions.swift; sourceTree = "<group>"; };
 		4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		4B8FC1982D62E42100D47E67 /* MissionsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissionsPageViewController.swift; sourceTree = "<group>"; };
+		4B8FC1992D62E42100D47E67 /* MissionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		4B8FC19A2D62E42100D47E67 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ../LoginViewController.swift; sourceTree = "<group>"; };
+		4B8FC19B2D62E42100D47E67 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		4B8FC19C2D62E42100D47E67 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SignUpViewController.swift; path = ../SignUpViewController.swift; sourceTree = "<group>"; };
+		4B8FC19D2D62E42100D47E67 /* BusinessDashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessDashboardViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +72,12 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
+				4B8FC19D2D62E42100D47E67 /* BusinessDashboardViewController.swift */,
+				4B8FC19A2D62E42100D47E67 /* LoginViewController.swift */,
+				4B8FC1982D62E42100D47E67 /* MissionsPageViewController.swift */,
+				4B8FC1992D62E42100D47E67 /* MissionsView.swift */,
+				4B8FC19B2D62E42100D47E67 /* Package.swift */,
+				4B8FC19C2D62E42100D47E67 /* SignUpViewController.swift */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
@@ -152,10 +170,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B8FC1A22D62E42100D47E67 /* SignUpViewController.swift in Sources */,
+				4B8FC1A02D62E42100D47E67 /* LoginViewController.swift in Sources */,
 				4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */,
+				4B8FC1A32D62E42100D47E67 /* BusinessDashboardViewController.swift in Sources */,
+				4B8FC19E2D62E42100D47E67 /* MissionsPageViewController.swift in Sources */,
 				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
 				4B1F09652D50748700C143B0 /* ContentView.swift in Sources */,
 				4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */,
+				4B8FC1A12D62E42100D47E67 /* Package.swift in Sources */,
+				4B8FC19F2D62E42100D47E67 /* MissionsView.swift in Sources */,
 				4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */,
 				4B1F096B2D507F8400C143B0 /* ValidationExtensions.swift in Sources */,
 			);
