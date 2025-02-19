@@ -229,6 +229,8 @@ struct SignUpView: View {
                 return
             }
             
+            navigateToMissions = true
+            
             let db = Firestore.firestore()
             let userData: [String: Any] = {
                 if selectedMode == .personal {

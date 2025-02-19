@@ -159,7 +159,7 @@ struct LoginView: View {
                 return
             }
             
-            // Successful login
+            // Add this code
             errorMessage = ""
             print("User logged in with email: \(email)")
             navigateToMissions = true  // Trigger navigation to MissionsPageView.

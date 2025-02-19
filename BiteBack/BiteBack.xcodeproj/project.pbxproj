@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6BB42D50819300D99247 /* MissionsView.swift */; };
+		0B6904B12D6560E800BEBC61 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B6904B02D6560E800BEBC61 /* GoogleService-Info.plist */; };
 		4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F094F2D50716400C143B0 /* Assets.xcassets */; };
 		4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F09522D50716400C143B0 /* Preview Assets.xcassets */; };
 		4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09602D50744900C143B0 /* BiteBackApp.swift */; };
@@ -18,7 +19,6 @@
 		4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */; };
 		4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */; };
 		4B1F09732D517ADF00C143B0 /* CheckToggleboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */; };
-		4BC8AEFF2D52A5F700C66F15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */; };
 		4BC8AF022D52A69400C66F15 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF012D52A69400C66F15 /* FirebaseAnalytics */; };
 		4BC8AF042D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF032D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion */; };
 		4BC8AF062D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF052D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -47,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		010C6BB42D50819300D99247 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		0B6904B02D6560E800BEBC61 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4B1F09482D50716300C143B0 /* BiteBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BiteBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1F094F2D50716400C143B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B1F09522D50716400C143B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -59,7 +60,6 @@
 		4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckToggleboxStyle.swift; sourceTree = "<group>"; };
-		4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,10 +116,10 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
-				4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
+				0B6904B02D6560E800BEBC61 /* GoogleService-Info.plist */,
 				4B1F095F2D50744800C143B0 /* BiteBack-Bridging-Header.h */,
 				4B1F09642D50748700C143B0 /* ContentView.swift */,
 				4B1F09662D507BA300C143B0 /* LoginView.swift */,
@@ -231,7 +231,7 @@
 			files = (
 				4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */,
 				4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */,
-				4BC8AEFF2D52A5F700C66F15 /* GoogleService-Info.plist in Resources */,
+				0B6904B12D6560E800BEBC61 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +385,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = YCTAF8C97V;
+				DEVELOPMENT_TEAM = 25MUFDV8G9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -398,7 +398,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.brian-shon.biteback.BiteBack";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "BiteBack/BiteBack-Bridging-Header.h";
@@ -417,7 +416,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = YCTAF8C97V;
+				DEVELOPMENT_TEAM = 25MUFDV8G9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -430,7 +429,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.brian-shon.biteback.BiteBack";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "BiteBack/BiteBack-Bridging-Header.h";
