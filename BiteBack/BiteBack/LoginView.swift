@@ -127,7 +127,7 @@ struct LoginView: View {
 
             // Navigation Links
             NavigationLink(
-                destination: MissionsPageView(userName: userDisplayName),
+                destination: CustomerTabView(userName: userDisplayName),
                 isActive: $navigateToMissions
             ) {
                 EmptyView()

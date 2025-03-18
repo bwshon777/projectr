@@ -115,6 +115,8 @@ struct MissionsPageView: View {
             .padding()
         }
         .onAppear(perform: fetchMissions)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
 
     func fetchMissions() {

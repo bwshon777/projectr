@@ -7,7 +7,6 @@ struct BusinessProfileView: View {
     @State private var restaurantId: String = ""
 
     var body: some View {
-        NavigationView {
             VStack {
                 // Business Header
                 Text(businessName)
@@ -56,8 +55,11 @@ struct BusinessProfileView: View {
             .onAppear {
                 fetchBusinessMissions()
             }
+            
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
         }
-    }
+    
 
     // MARK: - Firestore Fetch Logic
 

@@ -1,14 +1,14 @@
 //
-//  Untitled.swift
+//  CustomerProfileView.swift
 //  BiteBack
 //
-//  Created by Neel Gundavarapu on 3/17/25.
+//  Created by Neel Gundavarapu on 3/18/25.
 //
 
 import SwiftUI
 import FirebaseAuth
 
-struct BusinessSettingsView: View {
+struct CustomerProfileView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.dismiss) var dismiss // iOS 15+
 

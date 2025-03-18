@@ -14,6 +14,9 @@
 		0B14152F2D89208F00A4068B /* RedemptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B14152E2D89208400A4068B /* RedemptionView.swift */; };
 		0B1415312D89210700A4068B /* BusinessSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1415302D89209D00A4068B /* BusinessSettingsView.swift */; };
 		0B1415342D89485800A4068B /* EditMissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1415332D89485200A4068B /* EditMissionView.swift */; };
+		0B1415372D89E82300A4068B /* CustomerTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1415362D89E81D00A4068B /* CustomerTabView.swift */; };
+		0B1415392D89E94800A4068B /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1415382D89E94000A4068B /* ExploreView.swift */; };
+		0B14153B2D89E96100A4068B /* CustomerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B14153A2D89E95500A4068B /* CustomerProfileView.swift */; };
 		4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F094F2D50716400C143B0 /* Assets.xcassets */; };
 		4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F09522D50716400C143B0 /* Preview Assets.xcassets */; };
 		4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09602D50744900C143B0 /* BiteBackApp.swift */; };
@@ -59,6 +62,9 @@
 		0B14152E2D89208400A4068B /* RedemptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedemptionView.swift; sourceTree = "<group>"; };
 		0B1415302D89209D00A4068B /* BusinessSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessSettingsView.swift; sourceTree = "<group>"; };
 		0B1415332D89485200A4068B /* EditMissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMissionView.swift; sourceTree = "<group>"; };
+		0B1415362D89E81D00A4068B /* CustomerTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerTabView.swift; sourceTree = "<group>"; };
+		0B1415382D89E94000A4068B /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		0B14153A2D89E95500A4068B /* CustomerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerProfileView.swift; sourceTree = "<group>"; };
 		4B1F09482D50716300C143B0 /* BiteBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BiteBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1F094F2D50716400C143B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B1F09522D50716400C143B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -116,6 +122,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		0B1415352D89E7AF00A4068B /* BussinessView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = BussinessView;
+			sourceTree = "<group>";
+		};
 		4B1F093F2D50716300C143B0 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +159,9 @@
 				01E621452D62EE1A00A75822 /* GoogleService-Info.plist */,
 				4B1F09682D507BB900C143B0 /* SignUpView.swift */,
 				010C6BB42D50819300D99247 /* MissionsView.swift */,
+				0B1415362D89E81D00A4068B /* CustomerTabView.swift */,
+				0B1415382D89E94000A4068B /* ExploreView.swift */,
+				0B14153A2D89E95500A4068B /* CustomerProfileView.swift */,
 				4B1F096A2D507F8400C143B0 /* ValidationExtensions.swift */,
 				4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */,
 				4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */,
@@ -155,6 +171,7 @@
 				0B14152E2D89208400A4068B /* RedemptionView.swift */,
 				0B1415302D89209D00A4068B /* BusinessSettingsView.swift */,
 				0B1415332D89485200A4068B /* EditMissionView.swift */,
+				0B1415352D89E7AF00A4068B /* BussinessView */,
 			);
 			path = BiteBack;
 			sourceTree = "<group>";
@@ -272,13 +289,16 @@
 				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
 				0B1415312D89210700A4068B /* BusinessSettingsView.swift in Sources */,
 				4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */,
+				0B1415372D89E82300A4068B /* CustomerTabView.swift in Sources */,
 				010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */,
+				0B14153B2D89E96100A4068B /* CustomerProfileView.swift in Sources */,
 				4B1F09652D50748700C143B0 /* ContentView.swift in Sources */,
 				01E621482D62F32D00A75822 /* AddMissions.swift in Sources */,
 				0B14152D2D89206300A4068B /* BusinessTabView.swift in Sources */,
 				0B14152F2D89208F00A4068B /* RedemptionView.swift in Sources */,
 				4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */,
 				4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */,
+				0B1415392D89E94800A4068B /* ExploreView.swift in Sources */,
 				4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */,
 				4B1F09732D517ADF00C143B0 /* CheckToggleboxStyle.swift in Sources */,
 				4B1F096B2D507F8400C143B0 /* ValidationExtensions.swift in Sources */,
