@@ -10,60 +10,61 @@ struct EditMissionView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        Form {
-            Section(header: Text("Mission Details")) {
-                TextField("Title", text: $mission.title)
-                TextField("Description", text: $mission.description)
-                TextField("Reward", text: $mission.reward)
-
-                TextField("Expiration", text: Binding<String>(
-                    get: { mission.expiration ?? "" },
-                    set: { mission.expiration = $0 }
-                ))
-
-                TextField("Status", text: $mission.status)
-            }
-
-            Section {
-                Button("Save Changes") {
-                    updateMission()
+        VStack {
+            Form {
+                Section(header: Text("Mission Details")) {
+                    TextField("Title", text: $mission.title)
+                    TextField("Description", text: $mission.description)
+                    TextField("Reward", text: $mission.reward)
+                    TextField("Expiration", text: Binding<String>(
+                        get: { mission.expiration ?? "" },
+                        set: { mission.expiration = $0 }
+                    ))
+                    TextField("Status", text: $mission.status)
                 }
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.blue)
-                .cornerRadius(8)
+            }
+            .navigationTitle("Edit Mission")
+            .navigationBarTitleDisplayMode(.inline)
 
-                Button("Delete Mission") {
+            VStack(spacing: 16) {
+                Button(action: updateMission) {
+                    Text("Save Changes")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(red: 0.0, green: 0.698, blue: 1.0))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+
+                Button(action: {
                     showDeleteConfirmation = true
+                }) {
+                    Text("Delete Mission")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.red)
-                .cornerRadius(8)
             }
+            .padding()
         }
-        .navigationTitle("Edit Mission")
-        .navigationBarBackButtonHidden(true)
         .alert(isPresented: $showUpdateConfirmation) {
-            Alert(
-                title: Text("Success"),
-                message: Text("Mission updated!"),
-                dismissButton: .default(Text("OK")) {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            )
+            Alert(title: Text("Success"),
+                  message: Text("Mission updated!"),
+                  dismissButton: .default(Text("OK")) {
+                      presentationMode.wrappedValue.dismiss()
+                  })
         }
         .alert(isPresented: $showDeleteConfirmation) {
-            Alert(
-                title: Text("Delete Mission"),
-                message: Text("Are you sure you want to delete this mission?"),
-                primaryButton: .destructive(Text("Delete")) {
-                    deleteMission()
-                },
-                secondaryButton: .cancel()
-            )
+            Alert(title: Text("Are you sure?"),
+                  message: Text("This will permanently delete the mission."),
+                  primaryButton: .destructive(Text("Delete"), action: deleteMission),
+                  secondaryButton: .cancel())
         }
     }
+
+    // MARK: - Update Firebase
 
     func updateMission() {
         guard let missionId = mission.id else {
@@ -85,9 +86,9 @@ struct EditMissionView: View {
                 "imageUrl": mission.imageUrl ?? ""
             ]) { error in
                 if let error = error {
-                    print("❌ Error updating: \(error.localizedDescription)")
+                    print("❌ Error updating mission: \(error.localizedDescription)")
                 } else {
-                    print("✅ Success: Mission updated.")
+                    print("✅ Mission updated successfully.")
                     showUpdateConfirmation = true
                 }
             }
@@ -106,9 +107,9 @@ struct EditMissionView: View {
             .document(missionId)
             .delete { error in
                 if let error = error {
-                    print("❌ Error deleting: \(error.localizedDescription)")
+                    print("❌ Error deleting mission: \(error.localizedDescription)")
                 } else {
-                    print("🗑️ Mission deleted.")
+                    print("🗑️ Mission deleted successfully.")
                     presentationMode.wrappedValue.dismiss()
                 }
             }

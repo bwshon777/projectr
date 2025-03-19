@@ -11,7 +11,9 @@ import FirebaseStorage
 import PhotosUI  // For Image Picker
 
 struct AddMissionView: View {
-    @State private var restaurantName: String = ""
+    let restaurantName: String
+    
+    //@State private var restaurantName: String = ""
     @State private var title: String = ""
     @State private var description: String = ""
     @State private var reward: String = ""
@@ -22,10 +24,7 @@ struct AddMissionView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Restaurant Details")) {
-                    TextField("Restaurant Name", text: $restaurantName)
-                }
-
+                
                 Section(header: Text("Mission Details")) {
                     TextField("Title", text: $title)
                     TextField("Description", text: $description)
@@ -50,7 +49,7 @@ struct AddMissionView: View {
                     Text("Add Mission")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
@@ -137,7 +136,6 @@ struct AddMissionView: View {
     }
 
     func clearForm() {
-        restaurantName = ""
         title = ""
         description = ""
         reward = ""
@@ -178,9 +176,9 @@ struct ImagePicker: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
 
-struct AddMissionView_Preview: PreviewProvider {
-    static var previews: some View {
-        AddMissionView()
-    }
-}
+//struct AddMissionView_Preview: PreviewProvider {
+//    static var previews: some View {
+//        AddMissionView()
+//    }
+//}
 

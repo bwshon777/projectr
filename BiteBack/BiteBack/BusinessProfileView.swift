@@ -41,7 +41,7 @@ struct BusinessProfileView: View {
                 }
 
                 // Add New Mission Button
-                NavigationLink(destination: AddMissionView()) {
+                NavigationLink(destination: AddMissionView(restaurantName: businessName)) {
                     Text("Add New Mission")
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
