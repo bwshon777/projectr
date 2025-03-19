@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6BB42D50819300D99247 /* MissionsView.swift */; };
+		01636E4B2D8A8E1E00ACC294 /* CustomerTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E452D8A8E1E00ACC294 /* CustomerTabView.swift */; };
+		01636E4C2D8A8E1E00ACC294 /* CustomerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E442D8A8E1E00ACC294 /* CustomerProfileView.swift */; };
+		01636E4D2D8A8E1E00ACC294 /* EditMissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E462D8A8E1E00ACC294 /* EditMissionView.swift */; };
+		01636E4E2D8A8E1E00ACC294 /* BusinessTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E432D8A8E1E00ACC294 /* BusinessTabView.swift */; };
+		01636E4F2D8A8E1E00ACC294 /* BusinessSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E422D8A8E1E00ACC294 /* BusinessSettingsView.swift */; };
+		01636E502D8A8E1E00ACC294 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E472D8A8E1E00ACC294 /* ExploreView.swift */; };
+		01636E512D8A8E1E00ACC294 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E492D8A8E1E00ACC294 /* LoginViewController.swift */; };
+		01636E522D8A8E1E00ACC294 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E482D8A8E1E00ACC294 /* File.swift */; };
+		01636E532D8A8E1E00ACC294 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E4A2D8A8E1E00ACC294 /* MapView.swift */; };
+		01636E542D8A8E1E00ACC294 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E412D8A8E1E00ACC294 /* AppDelegate.swift */; };
+		01636E572D8A8E3C00ACC294 /* RedeptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E552D8A8E3C00ACC294 /* RedeptionView.swift */; };
+		01636E582D8A8E3C00ACC294 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */; };
 		01E621462D62EE1A00A75822 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E621452D62EE1A00A75822 /* GoogleService-Info.plist */; };
 		01E621482D62F32D00A75822 /* AddMissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E621472D62F32900A75822 /* AddMissions.swift */; };
 		4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F094F2D50716400C143B0 /* Assets.xcassets */; };
@@ -20,10 +32,7 @@
 		4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */; };
 		4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */; };
 		4B1F09732D517ADF00C143B0 /* CheckToggleboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */; };
-
 		4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */; };
-		4BC8AEFF2D52A5F700C66F15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */; };
-
 		4BC8AF022D52A69400C66F15 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF012D52A69400C66F15 /* FirebaseAnalytics */; };
 		4BC8AF042D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF032D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion */; };
 		4BC8AF062D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF052D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -52,6 +61,18 @@
 
 /* Begin PBXFileReference section */
 		010C6BB42D50819300D99247 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		01636E412D8A8E1E00ACC294 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		01636E422D8A8E1E00ACC294 /* BusinessSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessSettingsView.swift; sourceTree = "<group>"; };
+		01636E432D8A8E1E00ACC294 /* BusinessTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessTabView.swift; sourceTree = "<group>"; };
+		01636E442D8A8E1E00ACC294 /* CustomerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerProfileView.swift; sourceTree = "<group>"; };
+		01636E452D8A8E1E00ACC294 /* CustomerTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerTabView.swift; sourceTree = "<group>"; };
+		01636E462D8A8E1E00ACC294 /* EditMissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMissionView.swift; sourceTree = "<group>"; };
+		01636E472D8A8E1E00ACC294 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		01636E482D8A8E1E00ACC294 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		01636E492D8A8E1E00ACC294 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		01636E4A2D8A8E1E00ACC294 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		01636E552D8A8E3C00ACC294 /* RedeptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeptionView.swift; sourceTree = "<group>"; };
+		01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		01E621452D62EE1A00A75822 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01E621472D62F32900A75822 /* AddMissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMissions.swift; sourceTree = "<group>"; };
 		4B1F09482D50716300C143B0 /* BiteBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BiteBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,9 +87,7 @@
 		4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckToggleboxStyle.swift; sourceTree = "<group>"; };
-
 		4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
-		4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +144,19 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
+				01636E552D8A8E3C00ACC294 /* RedeptionView.swift */,
+				01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */,
 				01E621472D62F32900A75822 /* AddMissions.swift */,
+				01636E412D8A8E1E00ACC294 /* AppDelegate.swift */,
+				01636E422D8A8E1E00ACC294 /* BusinessSettingsView.swift */,
+				01636E432D8A8E1E00ACC294 /* BusinessTabView.swift */,
+				01636E442D8A8E1E00ACC294 /* CustomerProfileView.swift */,
+				01636E452D8A8E1E00ACC294 /* CustomerTabView.swift */,
+				01636E462D8A8E1E00ACC294 /* EditMissionView.swift */,
+				01636E472D8A8E1E00ACC294 /* ExploreView.swift */,
+				01636E482D8A8E1E00ACC294 /* File.swift */,
+				01636E492D8A8E1E00ACC294 /* LoginViewController.swift */,
+				01636E4A2D8A8E1E00ACC294 /* MapView.swift */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
@@ -257,7 +288,19 @@
 				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
 				4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */,
 				010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */,
+				01636E4B2D8A8E1E00ACC294 /* CustomerTabView.swift in Sources */,
+				01636E4C2D8A8E1E00ACC294 /* CustomerProfileView.swift in Sources */,
+				01636E4D2D8A8E1E00ACC294 /* EditMissionView.swift in Sources */,
+				01636E4E2D8A8E1E00ACC294 /* BusinessTabView.swift in Sources */,
+				01636E4F2D8A8E1E00ACC294 /* BusinessSettingsView.swift in Sources */,
+				01636E502D8A8E1E00ACC294 /* ExploreView.swift in Sources */,
+				01636E512D8A8E1E00ACC294 /* LoginViewController.swift in Sources */,
+				01636E522D8A8E1E00ACC294 /* File.swift in Sources */,
+				01636E532D8A8E1E00ACC294 /* MapView.swift in Sources */,
+				01636E542D8A8E1E00ACC294 /* AppDelegate.swift in Sources */,
 				4B1F09652D50748700C143B0 /* ContentView.swift in Sources */,
+				01636E572D8A8E3C00ACC294 /* RedeptionView.swift in Sources */,
+				01636E582D8A8E3C00ACC294 /* SignUpViewController.swift in Sources */,
 				01E621482D62F32D00A75822 /* AddMissions.swift in Sources */,
 				4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */,
 				4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */,
