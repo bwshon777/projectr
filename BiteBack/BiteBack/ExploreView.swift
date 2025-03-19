@@ -1,21 +1,60 @@
-//
-//  ExploreView.swift
-//  BiteBack
-//
-//  Created by Neel Gundavarapu on 3/18/25.
-//
-
 import SwiftUI
 
 struct ExploreView: View {
-    var body: some View {
-        VStack {
-            Text("Explore Page")
-                .font(.title)
-                .padding()
+    @State private var searchText = ""
 
-            Text("Explore page functionality goes here.")
-                .foregroundColor(.gray)
+    var body: some View {
+        ZStack(alignment: .top) {
+            // Background gradient
+            LinearGradient(
+                gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.white]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea(.all)
+
+            VStack(spacing: 10) {
+                // Title with welcome message
+                Text("🔍 Explore Nearby Restaurants")
+                    .font(.title2)
+                    .bold()
+                    .padding(.top, 20)
+
+                
+                // Map view
+                MapView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .cornerRadius(15)
+                    .padding()
+                    .shadow(radius: 5)
+            }
+
+            // Floating recenter button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        print("Re-centering Map")
+                    }) {
+                        Image(systemName: "location.fill")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+                    .padding(20)
+                }
+            }
         }
     }
 }
+
+// MARK: - Preview
+struct ExploreView_Previews: PreviewProvider {
+    static var previews: some View {
+        ExploreView()
+    }
+}
+

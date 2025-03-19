@@ -102,16 +102,6 @@ struct MissionsPageView: View {
                 
                 .padding(.top)
                 
-                NavigationLink(destination: MapView()) {
-                            Text("View Nearby Restaurants")
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .padding(.top, 10)
-                        }
                 
                 ForEach(restaurants) { restaurant in
                     VStack(alignment: .leading, spacing: 10) {
