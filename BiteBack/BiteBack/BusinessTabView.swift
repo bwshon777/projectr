@@ -1,42 +1,35 @@
 //
-//  CustomerTabView.swift
+//  BusinessTabView.swift
 //  BiteBack
 //
-//  Created by Neel Gundavarapu on 3/18/25.
+//  Created by Neel Gundavarapu on 3/17/25.
 //
 
 import SwiftUI
 
-struct CustomerTabView: View {
-    var userName: String
-
+struct BusinessTabView: View {
+    var businessName: String
     var body: some View {
         TabView {
-            MissionsPageView(userName: userName)
+            BusinessProfileView(businessName: businessName)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
 
-            ExploreView()
+            RedemptionView()
                 .tabItem {
-                    Image(systemName: "map")
-                    Text("Explore")
+                    Image(systemName: "qrcode.viewfinder")
+                    Text("Redeem")
                 }
 
-            CustomerProfileView()
+            BusinessSettingsView()
                 .tabItem {
                     Image(systemName: "person.crop.circle")
                     Text("Profile")
                 }
         }
         .accentColor(Color(red: 0.0, green: 0.698, blue: 1.0))
-    }
-}
-
-struct CustomerTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomerTabView(userName: "Test User")
     }
 }
 
