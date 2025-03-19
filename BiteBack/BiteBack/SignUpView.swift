@@ -18,27 +18,31 @@ enum SignUpMode: String, CaseIterable, Identifiable {
 // Enum for all text fields in SignUpView.
 enum SignUpField: Hashable {
     case personalName, personalEmail, personalPhone, personalPassword
-    case businessName, businessEmail, businessPhone, businessPassword
+    case businessName, businessEmail, businessPhone, businessPassword, businessStreet, businessCity, businessState
 }
 
 struct SignUpView: View {
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var selectedMode: SignUpMode = .personal
-
+    
     // Personal sign-up fields.
     @State private var personalName: String = ""
     @State private var personalEmail: String = ""
     @State private var personalPhone: String = ""
     @State private var personalPassword: String = ""
-
+    
     // Business sign-up fields.
     @State private var businessName: String = ""
     @State private var businessEmail: String = ""
     @State private var businessPhone: String = ""
+    @State private var businessStreet: String = ""
+    @State private var businessCity: String = ""
+    @State private var businessState: String = ""
+    
     @State private var businessPassword: String = ""
     @State private var verifyBusiness: Bool = false
-
+    
     // Common state for both forms.
     @State private var acceptedTerms: Bool = false
     @State private var errorMessage: String = ""
@@ -71,8 +75,7 @@ struct SignUpView: View {
                 // Hidden NavigationLink for Personal sign-up: navigates to MissionsPageView.
                 NavigationLink(
                     destination: MissionsPageView(
-                        userName: personalName.isEmpty ? "User" : personalName,
-                        restaurants: sampleRestaurants
+                        userName: personalName.isEmpty ? "User" : personalName
                     ),
                     isActive: $navigateToMissions
                 ) {
@@ -162,6 +165,21 @@ struct SignUpView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessEmail)
+                TextField("Business Street Address", text: $businessStreet)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessStreet)
+                TextField("Business City", text: $businessCity)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessCity)
+                TextField("Business State", text: $businessState)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessState)
                 TextField("Phone", text: $businessPhone)
                     .keyboardType(.phonePad)
                     .padding()
@@ -249,6 +267,9 @@ struct SignUpView: View {
                         "businessName": businessName,
                         "email": businessEmail,
                         "phone": businessPhone,
+                        "businessStreet": businessStreet,
+                        "businessCity": businessCity,
+                        "businessState": businessState,
                         "verifyBusiness": verifyBusiness,
                         "mode": "business"
                     ]
@@ -276,51 +297,52 @@ struct SignUpView: View {
         }
     }
     
-    // MARK: - Sample Data for MissionsPageView
-    var sampleRestaurants: [Restaurant] {
-        let sampleMissions1 = [
-            Mission(title: "Try Our Taco",
-                    description: "Order our famous taco dish to earn a free appetizer.",
-                    reward: "Free Appetizer",
-                    imageName: "taco"),
-            Mission(title: "Bring a Friend",
-                    description: "Bring a friend along and get 20% off your meal.",
-                    reward: "20% Off",
-                    imageName: "food2")
-        ]
-        let sampleMissions2 = [
-            Mission(title: "Happy Hour",
-                    description: "Join our happy hour to enjoy special discounts.",
-                    reward: "Discounted Drinks",
-                    imageName: "cocktail"),
-            Mission(title: "Loyalty Challenge",
-                    description: "Visit 5 times this month to earn a free meal.",
-                    reward: "Free Meal",
-                    imageName: "food4")
-        ]
-        let sampleMissions3 = [
-            Mission(title: "Family Fiesta",
-                    description: "Bring your family and dine together for a special discount.",
-                    reward: "Family Discount",
-                    imageName: "sushi"),
-            Mission(title: "Weekend Special",
-                    description: "Dine during the weekend to earn bonus rewards.",
-                    reward: "Bonus Rewards",
-                    imageName: "food6")
-        ]
-        
-        let restaurant1 = Restaurant(name: "Oscars Taco Shop", missions: sampleMissions1)
-        let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
-        let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
-        
-        return [restaurant1, restaurant2, restaurant3]
-    }
-}
-
-struct SignUpView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SignUpView()
+    //    // MARK: - Sample Data for MissionsPageView
+    //    var sampleRestaurants: [Restaurant] {
+    //        let sampleMissions1 = [
+    //            Mission(title: "Try Our Taco",
+    //                    description: "Order our famous taco dish to earn a free appetizer.",
+    //                    reward: "Free Appetizer",
+    //                    imageName: "taco"),
+    //            Mission(title: "Bring a Friend",
+    //                    description: "Bring a friend along and get 20% off your meal.",
+    //                    reward: "20% Off",
+    //                    imageName: "food2")
+    //        ]
+    //        let sampleMissions2 = [
+    //            Mission(title: "Happy Hour",
+    //                    description: "Join our happy hour to enjoy special discounts.",
+    //                    reward: "Discounted Drinks",
+    //                    imageName: "cocktail"),
+    //            Mission(title: "Loyalty Challenge",
+    //                    description: "Visit 5 times this month to earn a free meal.",
+    //                    reward: "Free Meal",
+    //                    imageName: "food4")
+    //        ]
+    //        let sampleMissions3 = [
+    //            Mission(title: "Family Fiesta",
+    //                    description: "Bring your family and dine together for a special discount.",
+    //                    reward: "Family Discount",
+    //                    imageName: "sushi"),
+    //            Mission(title: "Weekend Special",
+    //                    description: "Dine during the weekend to earn bonus rewards.",
+    //                    reward: "Bonus Rewards",
+    //                    imageName: "food6")
+    //        ]
+    //
+    //        let restaurant1 = Restaurant(name: "Oscars Taco Shop", missions: sampleMissions1)
+    //        let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
+    //        let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
+    //
+    //        return [restaurant1, restaurant2, restaurant3]
+    //    }
+    //}
+    
+    struct SignUpView_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationStack {
+                SignUpView()
+            }
         }
     }
 }
