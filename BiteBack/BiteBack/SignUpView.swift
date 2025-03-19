@@ -18,7 +18,7 @@ enum SignUpMode: String, CaseIterable, Identifiable {
 // Enum for all text fields in SignUpView.
 enum SignUpField: Hashable {
     case personalName, personalEmail, personalPhone, personalPassword
-    case businessName, businessEmail, businessPhone, businessPassword
+    case businessName, businessEmail, businessPhone, businessPassword, businessStreet, businessCity, businessState
 }
 
 struct SignUpView: View {
@@ -36,6 +36,10 @@ struct SignUpView: View {
     @State private var businessName: String = ""
     @State private var businessEmail: String = ""
     @State private var businessPhone: String = ""
+    @State private var businessStreet: String = ""
+    @State private var businessCity: String = ""
+    @State private var businessState: String = ""
+    
     @State private var businessPassword: String = ""
     @State private var verifyBusiness: Bool = false
     
@@ -161,6 +165,21 @@ struct SignUpView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessEmail)
+                TextField("Business Street Address", text: $businessStreet)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessStreet)
+                TextField("Business City", text: $businessCity)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessCity)
+                TextField("Business State", text: $businessState)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .focused($focusedField, equals: .businessState)
                 TextField("Phone", text: $businessPhone)
                     .keyboardType(.phonePad)
                     .padding()
@@ -248,6 +267,9 @@ struct SignUpView: View {
                         "businessName": businessName,
                         "email": businessEmail,
                         "phone": businessPhone,
+                        "businessStreet": businessStreet,
+                        "businessCity": businessCity,
+                        "businessState": businessState,
                         "verifyBusiness": verifyBusiness,
                         "mode": "business"
                     ]
