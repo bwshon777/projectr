@@ -29,24 +29,7 @@ struct ExploreView: View {
                     .shadow(radius: 5)
             }
 
-            // Floating recenter button
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        print("Re-centering Map")
-                    }) {
-                        Image(systemName: "location.fill")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .clipShape(Circle())
-                            .shadow(radius: 5)
-                    }
-                    .padding(20)
-                }
-            }
+            
         }
     }
 }
