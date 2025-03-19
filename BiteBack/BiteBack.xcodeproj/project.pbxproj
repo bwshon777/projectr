@@ -122,13 +122,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		0B1415352D89E7AF00A4068B /* BussinessView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = BussinessView;
-			sourceTree = "<group>";
-		};
 		4B1F093F2D50716300C143B0 = {
 			isa = PBXGroup;
 			children = (
@@ -149,7 +142,6 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
-				01E621472D62F32900A75822 /* AddMissions.swift */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
@@ -171,7 +163,7 @@
 				0B14152E2D89208400A4068B /* RedemptionView.swift */,
 				0B1415302D89209D00A4068B /* BusinessSettingsView.swift */,
 				0B1415332D89485200A4068B /* EditMissionView.swift */,
-				0B1415352D89E7AF00A4068B /* BussinessView */,
+				01E621472D62F32900A75822 /* AddMissions.swift */,
 			);
 			path = BiteBack;
 			sourceTree = "<group>";
