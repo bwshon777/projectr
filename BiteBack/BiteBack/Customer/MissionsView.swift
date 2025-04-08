@@ -17,6 +17,18 @@ struct Mission: Identifiable, Codable {
     var expiration: String?
     var imageUrl: String?
     var status: String
+    var steps: [String] = []
+    
+    init(id: String? = nil, title: String, description: String, reward: String, expiration: String? = nil, imageUrl: String? = nil, status: String, steps: [String]? = nil) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.reward = reward
+        self.expiration = expiration
+        self.imageUrl = imageUrl
+        self.status = status
+        self.steps = steps ?? []
+    }
 }
 
 struct Restaurant: Identifiable {
@@ -37,7 +49,7 @@ struct MissionCard: View {
                     .fontWeight(.bold)
                     .foregroundColor(.black)
 
-                Text("\u{1F525} 1 step")
+                Text("\u{1F525} \(mission.steps.count) step\(mission.steps.count == 1 ? "" : "s")")
                     .font(.subheadline)
                     .foregroundColor(.red)
 
@@ -110,10 +122,10 @@ struct MissionsPageView: View {
                             .bold()
 
                         ForEach(restaurant.missions) { mission in
-                            MissionCard(
-                                mission: mission,
-                                backgroundColor: restaurantColors[restaurant.name] ?? Color(.systemGray6)
-                            )
+                            NavigationLink(destination: MissionDetailView(mission: mission)) {
+                                                            MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray)
+                                                        }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }
@@ -158,7 +170,8 @@ struct MissionsPageView: View {
                                 reward: data["reward"] as? String ?? "",
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
-                                status: data["status"] as? String ?? "active"
+                                status: data["status"] as? String ?? "active",
+                                steps: data["steps"] as? [String] ?? []
                             )
                         }
 
@@ -176,11 +189,11 @@ struct MissionsPageView: View {
     }
 }
 
-struct MissionsPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MissionsPageView(userName: "James")
-        }
-    }
-}
+//struct MissionsPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            MissionsPageView(userName: "James")
+//        }
+//    }
+//}
 
