@@ -18,8 +18,9 @@ struct Mission: Identifiable, Codable {
     var imageUrl: String?
     var status: String
     var steps: [String] = []
-    
-    init(id: String? = nil, title: String, description: String, reward: String, expiration: String? = nil, imageUrl: String? = nil, status: String, steps: [String]? = nil) {
+    var restaurantId: String?   
+
+    init(id: String? = nil, title: String, description: String, reward: String, expiration: String? = nil, imageUrl: String? = nil, status: String, steps: [String]? = nil, restaurantId: String? = nil) {
         self.id = id
         self.title = title
         self.description = description
@@ -28,8 +29,10 @@ struct Mission: Identifiable, Codable {
         self.imageUrl = imageUrl
         self.status = status
         self.steps = steps ?? []
+        self.restaurantId = restaurantId
     }
 }
+
 
 struct Restaurant: Identifiable {
     let id = UUID()
@@ -171,7 +174,8 @@ struct MissionsPageView: View {
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
                                 status: data["status"] as? String ?? "active",
-                                steps: data["steps"] as? [String] ?? []
+                                steps: data["steps"] as? [String] ?? [],
+                                restaurantId: restaurantId
                             )
                         }
 

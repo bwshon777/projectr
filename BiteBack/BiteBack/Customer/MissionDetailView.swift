@@ -1,11 +1,35 @@
 import SwiftUI
 import CodeScanner
+import CoreImage.CIFilterBuiltins
+
+// MARK: - QR Code Generator
+
+let context = CIContext()
+let filter = CIFilter.qrCodeGenerator()
+
+func generateQRCode(from string: String) -> UIImage {
+    let data = Data(string.utf8)
+    filter.setValue(data, forKey: "inputMessage")
+
+    if let outputImage = filter.outputImage {
+        let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: 10, y: 10))
+        if let cgimg = context.createCGImage(scaledImage, from: scaledImage.extent) {
+            return UIImage(cgImage: cgimg)
+        }
+    }
+
+    return UIImage(systemName: "xmark.circle") ?? UIImage()
+}
+
+// MARK: - Mission Detail View
 
 struct MissionDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.dismiss) var dismiss
 
     let mission: Mission
+    let qrString = "biteback-test-qr" // Placeholder QR string
+
     @State private var currentStep = 0
     @State private var showQRCode = false
 
@@ -90,10 +114,11 @@ struct MissionDetailView: View {
                         .multilineTextAlignment(.center)
                         .padding()
 
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
+                    Image(uiImage: generateQRCode(from: qrString))
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
                         .frame(width: 200, height: 200)
-                        .overlay(Text("QR Code").foregroundColor(.gray))
 
                     Button("Done") {
                         presentationMode.wrappedValue.dismiss()
@@ -112,5 +137,4 @@ struct MissionDetailView: View {
         .navigationBarBackButtonHidden(true)
     }
 }
-
 
