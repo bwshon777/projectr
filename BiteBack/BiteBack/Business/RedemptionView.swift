@@ -13,6 +13,8 @@ struct RedemptionView: View {
             Text("Redeem Customer Rewards")
                 .font(.title)
                 .bold()
+                .frame(maxWidth: .infinity, alignment: .center)
+
 
             Button(action: {
                 isPresentingScanner = true
