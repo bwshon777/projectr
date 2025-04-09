@@ -1,6 +1,7 @@
 import SwiftUI
 import CodeScanner
 import CoreImage.CIFilterBuiltins
+import FirebaseAuth
 
 // MARK: - QR Code Generator
 
@@ -28,8 +29,15 @@ struct MissionDetailView: View {
     @Environment(\.dismiss) var dismiss
 
     let mission: Mission
-    let qrString = "biteback-test-qr" // Placeholder QR string
-
+    var qrString: String {
+            guard let userId = Auth.auth().currentUser?.uid,
+                  let restaurantId = mission.restaurantId,
+                  let missionId = mission.id else {
+                return "invalid-qr"
+            }
+            return "biteback-\(userId)-\(restaurantId)-\(missionId)"
+        }
+    
     @State private var currentStep = 0
     @State private var showQRCode = false
 
@@ -119,6 +127,22 @@ struct MissionDetailView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
+                    
+                    Divider()
+                            .padding(.horizontal, 50)
+
+                        // Label Section
+                        VStack(spacing: 4) {
+                            Text("VOUCHER ID")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Text(qrString)
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.5)
+                        }
 
                     Button("Done") {
                         presentationMode.wrappedValue.dismiss()
