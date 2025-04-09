@@ -2,6 +2,7 @@ import SwiftUI
 import CodeScanner
 import CoreImage.CIFilterBuiltins
 import FirebaseAuth
+import FirebaseFirestore
 
 // MARK: - QR Code Generator
 
@@ -29,17 +30,10 @@ struct MissionDetailView: View {
     @Environment(\.dismiss) var dismiss
 
     let mission: Mission
-    var qrString: String {
-            guard let userId = Auth.auth().currentUser?.uid,
-                  let restaurantId = mission.restaurantId,
-                  let missionId = mission.id else {
-                return "invalid-qr"
-            }
-            return "biteback-\(userId)-\(restaurantId)-\(missionId)"
-        }
-    
     @State private var currentStep = 0
     @State private var showQRCode = false
+    @State private var voucherId: String = ""
+    @State private var qrImage: UIImage? = nil
 
     var body: some View {
         VStack(spacing: 30) {
@@ -59,7 +53,7 @@ struct MissionDetailView: View {
                                 .fontWeight(.semibold)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color(red: 0.0, green: 0.698, blue: 1.0))
+                                .background(Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
@@ -102,7 +96,7 @@ struct MissionDetailView: View {
                         if currentStep < mission.steps.count - 1 {
                             currentStep += 1
                         } else {
-                            showQRCode = true
+                            handleMissionCompletion()
                         }
                     }) {
                         Text(currentStep < mission.steps.count - 1 ? "Next Step" : "Complete & Show QR")
@@ -122,27 +116,25 @@ struct MissionDetailView: View {
                         .multilineTextAlignment(.center)
                         .padding()
 
-                    Image(uiImage: generateQRCode(from: qrString))
-                        .interpolation(.none)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
+                    if let qrImage = qrImage {
+                        Image(uiImage: qrImage)
+                            .interpolation(.none)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200, height: 200)
+                    }
                     
                     Divider()
-                            .padding(.horizontal, 50)
+                        .padding(.horizontal, 50)
 
-                        // Label Section
-                        VStack(spacing: 4) {
-                            Text("VOUCHER ID")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            Text(qrString)
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.5)
-                        }
+                    Text("VOUCHER ID")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    Text(voucherId)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
 
                     Button("Done") {
                         presentationMode.wrappedValue.dismiss()
@@ -160,5 +152,52 @@ struct MissionDetailView: View {
         .padding()
         .navigationBarBackButtonHidden(true)
     }
-}
 
+    func handleMissionCompletion() {
+        guard let userId = Auth.auth().currentUser?.uid,
+              let missionId = mission.id else {
+            print("Missing user ID or mission ID")
+            return
+        }
+
+        let voucher = generateVoucherID(userId: userId, missionId: missionId)
+        self.voucherId = voucher
+        self.qrImage = generateQRCode(from: voucher)
+        saveQRCodeToFirestore(voucherId: voucher)
+        self.showQRCode = true
+    }
+
+    func generateVoucherID(userId: String, missionId: String) -> String {
+        let shortUser = userId.prefix(5).uppercased()
+        let shortMission = missionId.prefix(5).uppercased()
+        let random = UUID().uuidString.prefix(4).uppercased()
+        return "\(shortUser)-\(shortMission)-\(random)"
+    }
+
+    func saveQRCodeToFirestore(voucherId: String) {
+        guard let userId = Auth.auth().currentUser?.uid,
+              let missionId = mission.id else { return }
+
+        let db = Firestore.firestore()
+        let data: [String: Any] = [
+            "restaurantId": mission.restaurantId ?? "",
+            "missionTitle": mission.title,
+            "qrCode": voucherId,
+            "voucherId": voucherId,
+            "redeemed": false,
+            "timestamp": FieldValue.serverTimestamp()
+        ]
+
+        db.collection("users")
+            .document(userId)
+            .collection("completedMissions")
+            .document(missionId)
+            .setData(data) { error in
+                if let error = error {
+                    print("Error saving QR data: \(error.localizedDescription)")
+                } else {
+                    print("✅ QR data saved for mission \(missionId)")
+                }
+            }
+    }
+}
