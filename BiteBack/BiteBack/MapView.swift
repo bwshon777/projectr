@@ -2,9 +2,32 @@ import SwiftUI
 import MapKit
 import FirebaseFirestore
 import Firebase
+import CoreLocation
 
+// MARK: - Location Manager
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    private let manager = CLLocationManager()
+    @Published var userLocation: CLLocationCoordinate2D?
+
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        DispatchQueue.main.async {
+            self.userLocation = location.coordinate
+        }
+    }
+}
+
+// MARK: - Models
 struct BusinessLocation: Identifiable {
-    let id: UUID // Local UUID for the business
+    let id = UUID()
     let name: String
     let coordinate: CLLocationCoordinate2D
     let businessStreet: String
@@ -12,58 +35,103 @@ struct BusinessLocation: Identifiable {
     let businessState: String
 }
 
+struct BusinessMission: Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let reward: String
+}
+
+// MARK: - MapView
 struct MapView: View {
-    @State private var position: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 36.1447, longitude: -86.8021), // Vanderbilt University
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05) // Adjust zoom level
-        )
-    )
-    
+    @StateObject private var locationManager = LocationManager()
+
+    @State private var position: MapCameraPosition = .automatic
     @State private var businessLocations: [BusinessLocation] = []
-    
+    @State private var isLoading: Bool = true
+    @State private var selectedBusiness: BusinessLocation? = nil
+    @State private var showingMissionSheet = false
+    @State private var missions: [BusinessMission] = []
+    @State private var route: MKRoute? = nil
+
     private let geocoder = CLGeocoder()
 
-    // Fetch Chili's location from Firestore (using the specific document ID)
-    func fetchBusinessLocation() {
-        let db = Firestore.firestore()
-        let documentID = "kXnihmM57yYJOpm5HNZomAcho3Z2" // Chili's specific document ID because i couldn't figure out the
-        
-        db.collection("users").document(documentID).getDocument { snapshot, error in
-            guard let document = snapshot else {
-                print("Error fetching Chili's business: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            let data = document.data()
-            let name = data?["businessName"] as? String ?? "Chili's"
-            let street = data?["businessStreet"] as? String ?? ""
-            let city = data?["businessCity"] as? String ?? ""
-            let state = data?["businessState"] as? String ?? ""
-            
-            // Combine address fields
-            let address = "\(street), \(city), \(state)"
-            
-            // Use geocoding to get coordinates
-            geocodeAddress(address) { coordinate in
-                if let coordinate = coordinate {
-                    // Create a BusinessLocation object with a UUID and add it to the array
-                    let location = BusinessLocation(
-                        id: UUID(), // Local UUID
-                        name: name,
-                        coordinate: coordinate,
-                        businessStreet: street,
-                        businessCity: city,
-                        businessState: state
-                    )
-                    // Add Chili's location to the array
-                    self.businessLocations = [location] // Ensure we only show Chili's
-                }
-            }
-        }
+    func isValidBusinessData(_ data: [String: Any]) -> Bool {
+        return data["businessName"] != nil &&
+               data["businessStreet"] != nil &&
+               data["businessCity"] != nil &&
+               data["businessState"] != nil
     }
 
-    // Geocode address to coordinates
+    func parseBusiness(from data: [String: Any]) -> (String, String, String, String)? {
+        guard
+            let name = data["businessName"] as? String,
+            let street = data["businessStreet"] as? String,
+            let city = data["businessCity"] as? String,
+            let state = data["businessState"] as? String
+        else {
+            return nil
+        }
+        return (name, street, city, state)
+    }
+
+    func fetchBusinessLocations() {
+        let db = Firestore.firestore()
+        businessLocations = []
+        isLoading = true
+
+        db.collection("users")
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching users: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let documents = snapshot?.documents else {
+                    print("No user documents found.")
+                    return
+                }
+
+                for (index, document) in documents.enumerated() {
+                    let data = document.data()
+                    guard isValidBusinessData(data), let (name, street, city, state) = parseBusiness(from: data) else {
+                        print("Skipping document: invalid business data")
+                        continue
+                    }
+
+                    let address = "\(street), \(city), \(state)"
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .replacingOccurrences(of: "’", with: "'")
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.4) {
+                        geocodeAddress(address) { coordinate in
+                            if let coordinate = coordinate {
+                                let location = BusinessLocation(
+                                    name: name,
+                                    coordinate: coordinate,
+                                    businessStreet: street,
+                                    businessCity: city,
+                                    businessState: state
+                                )
+
+                                DispatchQueue.main.async {
+                                    businessLocations.append(location)
+                                    if index == documents.count - 1 {
+                                        isLoading = false
+                                    }
+                                }
+                            } else {
+                                print("Failed to geocode: \(address)")
+                                if index == documents.count - 1 {
+                                    isLoading = false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    }
+
     func geocodeAddress(_ address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
         geocoder.geocodeAddressString(address) { placemarks, error in
             if let error = error {
@@ -71,47 +139,201 @@ struct MapView: View {
                 completion(nil)
                 return
             }
-            
+
             if let placemark = placemarks?.first {
-                // Return the coordinate of the first geocoded result
                 completion(placemark.location?.coordinate)
             } else {
-                print("No geocoding results found.")
                 completion(nil)
+            }
+        }
+    }
+
+    func fetchMissions(for restaurantName: String) {
+        let db = Firestore.firestore()
+        db.collection("restaurants")
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching restaurants: \(error)")
+                    return
+                }
+
+                guard let documents = snapshot?.documents else { return }
+
+                for document in documents {
+                    let data = document.data()
+                    if let name = data["name"] as? String, name == restaurantName {
+                        db.collection("restaurants")
+                            .document(document.documentID)
+                            .collection("missions")
+                            .getDocuments { missionSnapshot, error in
+                                if let error = error {
+                                    print("Error fetching missions: \(error)")
+                                    return
+                                }
+
+                                missions = missionSnapshot?.documents.compactMap { doc in
+                                    let data = doc.data()
+                                    return BusinessMission(
+                                        id: doc.documentID,
+                                        title: data["title"] as? String ?? "Untitled",
+                                        description: data["description"] as? String ?? "",
+                                        reward: data["reward"] as? String ?? "0"
+                                    )
+                                } ?? []
+
+                                showingMissionSheet = true
+                            }
+                        break
+                    }
+                }
+            }
+    }
+
+    func getDirections(to destination: CLLocationCoordinate2D) {
+        guard let userLocation = locationManager.userLocation else { return }
+
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: userLocation))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination))
+        request.transportType = .automobile
+
+        let directions = MKDirections(request: request)
+        directions.calculate { response, error in
+            if let route = response?.routes.first {
+                self.route = route
+                position = .region(MKCoordinateRegion(
+                    center: destination,
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                ))
+            } else {
+                print("Failed to get route: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
     }
 
     var body: some View {
         VStack {
-            Map(position: $position) {
-                UserAnnotation() // Optional, will show the user's location
-                
-                // Add markers for just the Chili's business location
-                ForEach(businessLocations) { location in
-                    Marker(location.name, coordinate: location.coordinate)
-                        .tint(.red) // Make the marker red
+            if isLoading {
+                ProgressView("Loading nearby businesses...")
+                    .padding()
+            } else {
+                Map(position: $position) {
+                    UserAnnotation()
+
+                    ForEach(businessLocations) { location in
+                        Annotation(location.name, coordinate: location.coordinate) {
+                            VStack(spacing: 4) {
+                                Button(action: {
+                                    selectedBusiness = location
+                                    fetchMissions(for: location.name)
+                                }) {
+                                    VStack(spacing: 4) {
+                                        Image(systemName: "building.2.crop.circle")
+                                            .resizable()
+                                            .frame(width: 28, height: 28)
+                                            .foregroundColor(.red)
+                                        Text(location.name)
+                                            .font(.caption)
+                                            .padding(4)
+                                            .background(Color.white.opacity(0.8))
+                                            .cornerRadius(6)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if let route = route {
+                        MapPolyline(route.polyline)
+                            .stroke(.blue, lineWidth: 5)
+                    }
+                }
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                }
+
+                if route != nil {
+                    Button(action: {
+                        route = nil
+                    }) {
+                        Text("Clear Route")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.red)
+                            .cornerRadius(10)
+                            .shadow(radius: 4)
+                    }
+                    .padding(.bottom, 16)
                 }
             }
-            .onAppear {
-                fetchBusinessLocation() // Fetch Chili's location when the view appears
-            }
-            .mapControls {
-                MapUserLocationButton() // Button to re-center on user location
-                MapCompass() //
-            }
-            .edgesIgnoringSafeArea(.all)
-            .navigationTitle("Chili's Location")
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .onAppear {
+            fetchBusinessLocations()
+        }
+        .onChange(of: "\(locationManager.userLocation?.latitude ?? 0),\(locationManager.userLocation?.longitude ?? 0)") { _ in
+            if let newLocation = locationManager.userLocation {
+                position = .region(MKCoordinateRegion(
+                    center: newLocation,
+                    span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                ))
+            }
+        }
+        .sheet(isPresented: $showingMissionSheet) {
+            NavigationView {
+                VStack(spacing: 0) {
+                    Text(selectedBusiness?.name ?? "Missions")
+                        .font(.title2).bold()
+                        .padding(.top)
+
+                    Divider()
+
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            ForEach(missions) { mission in
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text(mission.title)
+                                        .font(.headline)
+                                    Text(mission.description)
+                                        .font(.body)
+                                        .foregroundColor(.secondary)
+                                    Text("Reward: \(mission.reward)")
+                                        .font(.caption)
+                                        .foregroundColor(.green)
+                                }
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                            }
+
+                            if let destination = selectedBusiness?.coordinate {
+                                Button(action: {
+                                    getDirections(to: destination)
+                                    showingMissionSheet = false
+                                }) {
+                                    HStack {
+                                        Spacer()
+                                        Image(systemName: "location.fill")
+                                        Text("Get Directions")
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                }
+                                .padding(.top)
+                            }
+                        }
+                        .padding()
+                    }
+                }
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
+        .navigationTitle("Business Locations")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MapView()
-        }
-    }
-}
-
