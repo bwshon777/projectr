@@ -8,6 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C6BB42D50819300D99247 /* MissionsView.swift */; };
+		01852F8A2DADB95F00DE1453 /* CustomerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F812DADB95F00DE1453 /* CustomerProfileView.swift */; };
+		01852F8B2DADB95F00DE1453 /* RedeptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F882DADB95F00DE1453 /* RedeptionView.swift */; };
+		01852F8C2DADB95F00DE1453 /* EditMissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F832DADB95F00DE1453 /* EditMissionView.swift */; };
+		01852F8D2DADB95F00DE1453 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F892DADB95F00DE1453 /* SignUpViewController.swift */; };
+		01852F8E2DADB95F00DE1453 /* CustomerTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F822DADB95F00DE1453 /* CustomerTabView.swift */; };
+		01852F8F2DADB95F00DE1453 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F842DADB95F00DE1453 /* ExploreView.swift */; };
+		01852F902DADB95F00DE1453 /* BusinessSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F7F2DADB95F00DE1453 /* BusinessSettingsView.swift */; };
+		01852F912DADB95F00DE1453 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F862DADB95F00DE1453 /* LoginViewController.swift */; };
+		01852F922DADB95F00DE1453 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F7E2DADB95F00DE1453 /* AppDelegate.swift */; };
+		01852F932DADB95F00DE1453 /* BusinessTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F802DADB95F00DE1453 /* BusinessTabView.swift */; };
+		01852F942DADB95F00DE1453 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F872DADB95F00DE1453 /* MapView.swift */; };
+		01852F952DADB95F00DE1453 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01852F852DADB95F00DE1453 /* File.swift */; };
 		01E621462D62EE1A00A75822 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E621452D62EE1A00A75822 /* GoogleService-Info.plist */; };
 		01E621482D62F32D00A75822 /* AddMissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E621472D62F32900A75822 /* AddMissions.swift */; };
 		4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F094F2D50716400C143B0 /* Assets.xcassets */; };
@@ -20,10 +32,7 @@
 		4B1F096D2D5085B900C143B0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */; };
 		4B1F096F2D517AA700C143B0 /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */; };
 		4B1F09732D517ADF00C143B0 /* CheckToggleboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */; };
-
 		4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */; };
-		4BC8AEFF2D52A5F700C66F15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */; };
-
 		4BC8AF022D52A69400C66F15 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF012D52A69400C66F15 /* FirebaseAnalytics */; };
 		4BC8AF042D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF032D52A69400C66F15 /* FirebaseAnalyticsOnDeviceConversion */; };
 		4BC8AF062D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4BC8AF052D52A69400C66F15 /* FirebaseAnalyticsWithoutAdIdSupport */; };
@@ -52,6 +61,19 @@
 
 /* Begin PBXFileReference section */
 		010C6BB42D50819300D99247 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		01852F7E2DADB95F00DE1453 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		01852F7F2DADB95F00DE1453 /* BusinessSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessSettingsView.swift; sourceTree = "<group>"; };
+		01852F802DADB95F00DE1453 /* BusinessTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessTabView.swift; sourceTree = "<group>"; };
+		01852F812DADB95F00DE1453 /* CustomerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerProfileView.swift; sourceTree = "<group>"; };
+		01852F822DADB95F00DE1453 /* CustomerTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerTabView.swift; sourceTree = "<group>"; };
+		01852F832DADB95F00DE1453 /* EditMissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMissionView.swift; sourceTree = "<group>"; };
+		01852F842DADB95F00DE1453 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		01852F852DADB95F00DE1453 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		01852F862DADB95F00DE1453 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		01852F872DADB95F00DE1453 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		01852F882DADB95F00DE1453 /* RedeptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeptionView.swift; sourceTree = "<group>"; };
+		01852F892DADB95F00DE1453 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		01852F962DADBA9B00DE1453 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		01E621452D62EE1A00A75822 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01E621472D62F32900A75822 /* AddMissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMissions.swift; sourceTree = "<group>"; };
 		4B1F09482D50716300C143B0 /* BiteBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BiteBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,9 +88,7 @@
 		4B1F096C2D5085B900C143B0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		4B1F096E2D517AA700C143B0 /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		4B1F09722D517ADF00C143B0 /* CheckToggleboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckToggleboxStyle.swift; sourceTree = "<group>"; };
-
 		4B8FC1A62D62EE7000D47E67 /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
-		4BC8AEFE2D52A5F700C66F15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +145,19 @@
 		4B1F094A2D50716300C143B0 /* BiteBack */ = {
 			isa = PBXGroup;
 			children = (
+				01852F962DADBA9B00DE1453 /* Info.plist */,
+				01852F7E2DADB95F00DE1453 /* AppDelegate.swift */,
+				01852F7F2DADB95F00DE1453 /* BusinessSettingsView.swift */,
+				01852F802DADB95F00DE1453 /* BusinessTabView.swift */,
+				01852F812DADB95F00DE1453 /* CustomerProfileView.swift */,
+				01852F822DADB95F00DE1453 /* CustomerTabView.swift */,
+				01852F832DADB95F00DE1453 /* EditMissionView.swift */,
+				01852F842DADB95F00DE1453 /* ExploreView.swift */,
+				01852F852DADB95F00DE1453 /* File.swift */,
+				01852F862DADB95F00DE1453 /* LoginViewController.swift */,
+				01852F872DADB95F00DE1453 /* MapView.swift */,
+				01852F882DADB95F00DE1453 /* RedeptionView.swift */,
+				01852F892DADB95F00DE1453 /* SignUpViewController.swift */,
 				01E621472D62F32900A75822 /* AddMissions.swift */,
 				4B1F094F2D50716400C143B0 /* Assets.xcassets */,
 				4B1F09512D50716400C143B0 /* Preview Content */,
@@ -254,6 +287,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B1F09692D507BB900C143B0 /* SignUpView.swift in Sources */,
+				01852F8A2DADB95F00DE1453 /* CustomerProfileView.swift in Sources */,
+				01852F8B2DADB95F00DE1453 /* RedeptionView.swift in Sources */,
+				01852F8C2DADB95F00DE1453 /* EditMissionView.swift in Sources */,
+				01852F8D2DADB95F00DE1453 /* SignUpViewController.swift in Sources */,
+				01852F8E2DADB95F00DE1453 /* CustomerTabView.swift in Sources */,
+				01852F8F2DADB95F00DE1453 /* ExploreView.swift in Sources */,
+				01852F902DADB95F00DE1453 /* BusinessSettingsView.swift in Sources */,
+				01852F912DADB95F00DE1453 /* LoginViewController.swift in Sources */,
+				01852F922DADB95F00DE1453 /* AppDelegate.swift in Sources */,
+				01852F932DADB95F00DE1453 /* BusinessTabView.swift in Sources */,
+				01852F942DADB95F00DE1453 /* MapView.swift in Sources */,
+				01852F952DADB95F00DE1453 /* File.swift in Sources */,
 				4B1F09672D507BA300C143B0 /* LoginView.swift in Sources */,
 				4B8FC1A72D62EE7000D47E67 /* BusinessProfileView.swift in Sources */,
 				010C6BB52D50819A00D99247 /* MissionsView.swift in Sources */,
@@ -398,9 +443,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = YCTAF8C97V;
+				DEVELOPMENT_TEAM = FLB323CGJ3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BiteBack/Info.plist;
+				INFOPLIST_KEY_NSLocationUsageDescription = "This app uses your location to provide directions to restaurants";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app only needs your location when you use the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -430,9 +478,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = YCTAF8C97V;
+				DEVELOPMENT_TEAM = FLB323CGJ3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BiteBack/Info.plist;
+				INFOPLIST_KEY_NSLocationUsageDescription = "This app uses your location to provide directions to restaurants";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app only needs your location when you use the app.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
