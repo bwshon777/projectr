@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 struct Mission: Identifiable, Codable {
     @DocumentID var id: String?
@@ -18,7 +19,7 @@ struct Mission: Identifiable, Codable {
     var imageUrl: String?
     var status: String
     var steps: [String] = []
-    var restaurantId: String?   
+    var restaurantId: String?
 
     init(id: String? = nil, title: String, description: String, reward: String, expiration: String? = nil, imageUrl: String? = nil, status: String, steps: [String]? = nil, restaurantId: String? = nil) {
         self.id = id
@@ -33,7 +34,6 @@ struct Mission: Identifiable, Codable {
     }
 }
 
-
 struct Restaurant: Identifiable {
     let id = UUID()
     let name: String
@@ -43,46 +43,57 @@ struct Restaurant: Identifiable {
 struct MissionCard: View {
     let mission: Mission
     let backgroundColor: Color
+    let isRedeemed: Bool
 
     var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(mission.title)
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
+        ZStack(alignment: .topLeading) {
+            HStack(alignment: .center, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(mission.title)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
 
-                Text("\u{1F525} \(mission.steps.count) step\(mission.steps.count == 1 ? "" : "s")")
-                    .font(.subheadline)
-                    .foregroundColor(.red)
+                    Text("\u{1F525} \(mission.steps.count) step\(mission.steps.count == 1 ? "" : "s")")
+                        .font(.subheadline)
+                        .foregroundColor(.red)
 
-                Text(mission.description)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(2)
-            }
+                    Text(mission.description)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .lineLimit(2)
+                }
+                Spacer()
 
-            
-            Spacer()
-
-            if let urlStr = mission.imageUrl, let url = URL(string: urlStr) {
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 80, height: 80)
-                        .clipped()
-                        .cornerRadius(10)
-                } placeholder: {
-                    Color.gray.frame(width: 80, height: 80).cornerRadius(10)
+                if let urlStr = mission.imageUrl, let url = URL(string: urlStr) {
+                    AsyncImage(url: url) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 80, height: 80)
+                            .clipped()
+                            .cornerRadius(10)
+                    } placeholder: {
+                        Color.gray.frame(width: 80, height: 80).cornerRadius(10)
+                    }
                 }
             }
+            .padding()
+            .background(backgroundColor)
+            .cornerRadius(20)
+            .shadow(radius: 3)
+            .opacity(isRedeemed ? 0.4 : 1.0)
+
+            if isRedeemed {
+                Text("REDEEMED")
+                    .font(.caption2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(6)
+                    .background(Color.red)
+                    .cornerRadius(8)
+                    .padding([.top, .leading], 8)
+            }
         }
-        
-        
-        .padding()
-        .background(backgroundColor)
-        .cornerRadius(20)
-        .shadow(radius: 3)
     }
 }
 
@@ -92,6 +103,7 @@ struct MissionsPageView: View {
 
     @State private var restaurants: [Restaurant] = []
     @State private var restaurantColors: [String: Color] = [:]
+    @State private var redeemedMissionIds: Set<String> = []
 
     let pastelColors: [Color] = [
         Color(red: 1.0, green: 0.87, blue: 0.87),
@@ -104,7 +116,6 @@ struct MissionsPageView: View {
 
     var body: some View {
         ScrollView {
-            
             VStack(alignment: .leading, spacing: 25) {
                 HStack {
                     Text("Welcome")
@@ -114,10 +125,8 @@ struct MissionsPageView: View {
                         .font(.title)
                         .bold()
                 }
-                
                 .padding(.top)
-                
-                
+
                 ForEach(restaurants) { restaurant in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(restaurant.name)
@@ -125,17 +134,26 @@ struct MissionsPageView: View {
                             .bold()
 
                         ForEach(restaurant.missions) { mission in
-                            NavigationLink(destination: MissionDetailView(mission: mission)) {
-                                                            MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray)
-                                                        }
-                            .buttonStyle(PlainButtonStyle())
+                            let isRedeemed = redeemedMissionIds.contains(mission.id ?? "")
+
+                            if isRedeemed {
+                                MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray, isRedeemed: true)
+                            } else {
+                                NavigationLink(destination: MissionDetailView(mission: mission)) {
+                                    MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray, isRedeemed: false)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
                         }
                     }
                 }
             }
             .padding()
         }
-        .onAppear(perform: fetchMissions)
+        .onAppear {
+            fetchMissions()
+            fetchRedeemedMissions()
+        }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
     }
@@ -178,7 +196,6 @@ struct MissionsPageView: View {
                                 restaurantId: restaurantId
                             )
                         }
-
                         let restaurant = Restaurant(name: name, missions: missions)
                         fetchedRestaurants.append(restaurant)
                     }
@@ -191,13 +208,14 @@ struct MissionsPageView: View {
             }
         }
     }
+
+    func fetchRedeemedMissions() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).collection("completedMissions").getDocuments { snapshot, error in
+            guard let documents = snapshot?.documents else { return }
+            let redeemedIds = documents.filter { ($0.data()["redeemed"] as? Bool) == true }.compactMap { $0.documentID }
+            self.redeemedMissionIds = Set(redeemedIds)
+        }
+    }
 }
-
-//struct MissionsPageView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack {
-//            MissionsPageView(userName: "James")
-//        }
-//    }
-//}
-

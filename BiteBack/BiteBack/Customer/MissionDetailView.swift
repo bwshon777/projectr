@@ -34,6 +34,8 @@ struct MissionDetailView: View {
     @State private var showQRCode = false
     @State private var voucherId: String = ""
     @State private var qrImage: UIImage? = nil
+    @State private var hasLoadedCompletionStatus = false
+
 
     var body: some View {
         VStack(spacing: 30) {
@@ -150,8 +152,36 @@ struct MissionDetailView: View {
             Spacer()
         }
         .padding()
+        
+        .onAppear {
+            if !hasLoadedCompletionStatus {
+                checkIfAlreadyCompleted()
+                hasLoadedCompletionStatus = true
+            }
+        }
         .navigationBarBackButtonHidden(true)
     }
+    
+    func checkIfAlreadyCompleted() {
+        guard let userId = Auth.auth().currentUser?.uid,
+              let missionId = mission.id else { return }
+
+        let ref = Firestore.firestore()
+            .collection("users")
+            .document(userId)
+            .collection("completedMissions")
+            .document(missionId)
+
+        ref.getDocument { snapshot, error in
+            if let data = snapshot?.data(),
+               let existingVoucher = data["voucherId"] as? String {
+                self.voucherId = existingVoucher
+                self.qrImage = generateQRCode(from: existingVoucher)
+                self.showQRCode = true
+            }
+        }
+    }
+
 
     func handleMissionCompletion() {
         guard let userId = Auth.auth().currentUser?.uid,
