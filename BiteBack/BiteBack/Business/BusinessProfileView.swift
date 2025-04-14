@@ -41,7 +41,7 @@ struct BusinessProfileView: View {
                 }
 
                 // Add New Mission Button
-                NavigationLink(destination: AddMissionView()) {
+                NavigationLink(destination: AddMissionView(restaurantName: businessName)) {
                     Text("Add New Mission")
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
@@ -101,7 +101,8 @@ struct BusinessProfileView: View {
                                 reward: data["reward"] as? String ?? "",
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
-                                status: data["status"] as? String ?? "active"
+                                status: data["status"] as? String ?? "active",
+                                steps: data["steps"] as? [String] ?? []
                             )
                         }
                     }
