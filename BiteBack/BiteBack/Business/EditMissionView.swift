@@ -69,7 +69,7 @@ struct EditMissionView: View {
                         mission.steps.append("")
                     }) {
                         Label("Add Step", systemImage: "plus.circle.fill")
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                     }
                 }
 
@@ -78,7 +78,7 @@ struct EditMissionView: View {
                         Text("Save Changes")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }

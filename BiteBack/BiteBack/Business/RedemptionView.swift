@@ -26,7 +26,7 @@ struct RedemptionView: View {
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                     .foregroundColor(.white)
                     .cornerRadius(12)
             }
@@ -95,7 +95,10 @@ struct RedemptionView: View {
 
             self.stepProofs = data["stepProofs"] as? [String] ?? []
             self.missionDocRef = document.reference
-            self.navigateToApproval = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.navigateToApproval = true
+            }
         }
     }
 }

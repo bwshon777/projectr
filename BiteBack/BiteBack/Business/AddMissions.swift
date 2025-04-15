@@ -59,7 +59,7 @@ struct AddMissionView: View {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
                                 Text("Add Step")
-                            }.foregroundColor(.blue)
+                            }.foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                         }
                     }
 
@@ -75,14 +75,14 @@ struct AddMissionView: View {
                         Button("Select Image") {
                             isImagePickerPresented.toggle()
                         }
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                     }
 
                     Button(action: addMission) {
                         Text("Add Mission")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }

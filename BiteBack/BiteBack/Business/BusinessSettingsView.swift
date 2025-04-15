@@ -16,12 +16,28 @@ struct BusinessSettingsView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 25) {
-                Text("Your Business Profile")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.top, 30)
+            VStack(spacing: 0) {
+                // MARK: - Header
+                ZStack(alignment: .bottom) {
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color(red: 0.0, green: 0.698, blue: 1.0)]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .frame(height: 200)
+                    .clipShape(RoundedCornerShape(corners: [.bottomLeft, .bottomRight], radius: 40))
+                    .ignoresSafeArea(edges: .top)
 
+                    Text(businessName.isEmpty ? "Your Business" : businessName)
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding(.bottom, 80)
+                }
+
+                Spacer().frame(height: 50)
+
+                // MARK: - Info Card
                 VStack(spacing: 16) {
                     ProfileRow(icon: "building.2.fill", label: businessName)
                     ProfileRow(icon: "envelope.fill", label: email)
@@ -32,45 +48,56 @@ struct BusinessSettingsView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color(uiColor: .secondarySystemBackground))
+                .background(Color.white)
                 .cornerRadius(20)
                 .shadow(color: Color.black.opacity(0.1), radius: 6, x: 0, y: 4)
                 .padding(.horizontal)
 
-                NavigationLink(destination: EditBusinessSettingsView(
-                    businessName: businessName,
-                    email: email,
-                    phone: phone,
-                    street: street,
-                    city: city,
-                    state: state
-                )) {
-                    Text("Edit Profile")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal)
+                Spacer()
+                
+                // MARK: - Buttons
+                VStack(spacing: 12) {
+                    NavigationLink(destination: EditBusinessSettingsView(
+                        businessName: businessName,
+                        email: email,
+                        phone: phone,
+                        street: street,
+                        city: city,
+                        state: state
+                    )) {
+                        Text("Edit Profile")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                LinearGradient(
+                                    colors: [Color(red: 0.0, green: 0.698, blue: 1.0)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
 
-                Button(action: {
-                    showLogoutConfirmation = true
-                }) {
-                    Text("Log Out")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
+                    Button(action: {
+                        showLogoutConfirmation = true
+                    }) {
+                        Text("Log Out")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
                 }
                 .padding(.horizontal)
+                .padding(.bottom, 30)
 
                 Spacer()
             }
-            .padding(.bottom)
+            .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .accentColor(.blue)
             .onAppear(perform: loadUserData)
             .alert(isPresented: $showLogoutConfirmation) {
@@ -86,6 +113,28 @@ struct BusinessSettingsView: View {
         }
     }
 
+    // MARK: - Reusable Row
+    struct ProfileRow: View {
+        let icon: String
+        let label: String
+
+        var body: some View {
+            HStack(spacing: 16) {
+                Image(systemName: icon)
+                    .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
+                    .font(.title3)
+                    .frame(width: 30)
+
+                Text(label)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.primary)
+
+                Spacer()
+            }
+        }
+    }
+
+    
     func loadUserData() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
