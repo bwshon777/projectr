@@ -1,6 +1,3 @@
-// AddMissionView.swift
-// BiteBack
-
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
@@ -34,33 +31,61 @@ struct AddMissionView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-
                     GroupBox(label: Text("MISSION DETAILS").fontWeight(.bold)) {
-                        TextField("Title", text: $title)
-                        TextField("Description", text: $description)
-                        TextField("Reward", text: $reward)
-                        TextField("Expiration Date (YYYY-MM-DD)", text: $expiration)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Title").font(.caption).foregroundColor(.gray)
+                            TextField("Enter mission title", text: $title)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Description").font(.caption).foregroundColor(.gray)
+                            TextField("Enter mission description", text: $description)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Reward").font(.caption).foregroundColor(.gray)
+                            TextField("Enter reward", text: $reward)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Expiration Date").font(.caption).foregroundColor(.gray)
+                            TextField("YYYY-MM-DD", text: $expiration)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        .padding(.top, 6)
                     }
 
                     GroupBox(label: Text("MISSION STEPS").fontWeight(.bold)) {
-                        if !steps.isEmpty {
-                            ForEach(steps.indices, id: \ .self) { index in
-                                HStack {
-                                    TextField("Step \(index + 1)", text: $steps[index])
-                                    if steps.count > 1 {
-                                        Button(action: { steps.remove(at: index) }) {
-                                            Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(steps.indices, id: \.self) { index in
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Step \(index + 1)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+
+                                    HStack {
+                                        TextField("Enter step", text: $steps[index])
+                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                                        if steps.count > 1 {
+                                            Button(action: { steps.remove(at: index) }) {
+                                                Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        Button(action: { steps.append("") }) {
+
                             HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Add Step")
-                            }.foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
+                                Spacer()
+                                Button(action: {
+                                    steps.append("")
+                                }) {
+                                    Label("Add Step", systemImage: "plus.circle.fill")
+                                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
+                                }
+                                Spacer()
+                            }
+                            .padding(.top, 6)
                         }
+                        .padding(.top, 6)
                     }
 
                     GroupBox(label: Text("UPLOAD IMAGE").fontWeight(.bold)) {
@@ -152,39 +177,35 @@ struct AddMissionView: View {
     }
 }
 
+// MARK: - Custom Image Picker
 
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
 
-    // MARK: - Custom Image Picker
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        var parent: ImagePicker
 
-    struct ImagePicker: UIViewControllerRepresentable {
-        @Binding var image: UIImage?
+        init(parent: ImagePicker) {
+            self.parent = parent
+        }
 
-        class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-            var parent: ImagePicker
-
-            init(parent: ImagePicker) {
-                self.parent = parent
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
             }
-
-            func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-                if let uiImage = info[.originalImage] as? UIImage {
-                    parent.image = uiImage
-                }
-                picker.dismiss(animated: true)
-            }
+            picker.dismiss(animated: true)
         }
-
-        func makeCoordinator() -> Coordinator {
-            Coordinator(parent: self)
-        }
-
-        func makeUIViewController(context: Context) -> UIImagePickerController {
-            let picker = UIImagePickerController()
-            picker.delegate = context.coordinator
-            return picker
-        }
-
-        func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     }
 
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
 
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+}

@@ -17,21 +17,19 @@ struct ApproveMissionView: View {
     @State private var selectedImageURL: IdentifiableURL? = nil
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .trailing, spacing: 0) {
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "arrow.left")
-                            .foregroundColor(.gray)
-                            .padding()
-                    }
-                }
+        VStack(alignment: .leading, spacing: 20) {
+            Button(action: { dismiss() }) {
+                Image(systemName: "arrow.left")
+                    .foregroundColor(.gray)
+            }
 
+            Text("Review Mission Proofs")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.bottom, 5)
+
+            ScrollView {
                 VStack(spacing: 20) {
-                    Text("Review Mission Proofs")
-                        .font(.title)
-                        .bold()
-
                     ForEach(stepProofs, id: \.self) { urlString in
                         if let url = URL(string: urlString) {
                             AsyncImage(url: url) { image in
@@ -71,6 +69,7 @@ struct ApproveMissionView: View {
                 .padding()
             }
         }
+        .padding()
         .navigationBarBackButtonHidden(true)
         .sheet(item: $selectedImageURL) { identifiable in
             ZStack {
