@@ -69,15 +69,9 @@ struct BusinessSettingsView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(
-                                LinearGradient(
-                                    colors: [Color(red: 0.0, green: 0.698, blue: 1.0)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
+                            .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .cornerRadius(16)
                     }
 
                     Button(action: {
@@ -89,13 +83,11 @@ struct BusinessSettingsView: View {
                             .padding()
                             .background(Color.red)
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .cornerRadius(16)
                     }
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 30)
-
-                Spacer()
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .accentColor(.blue)

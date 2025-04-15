@@ -64,7 +64,7 @@ struct RedemptionView: View {
             scannedCode = scan.string
             validateVoucher(voucherId: scannedCode)
         case .failure:
-            message = "Failed to scan the QR code."
+            message = "Failed to scan the QR code"
             showMessage = true
         }
     }
@@ -81,14 +81,14 @@ struct RedemptionView: View {
             }
 
             guard let document = snapshot?.documents.first else {
-                message = "No matching voucher found."
+                message = "No matching voucher found"
                 showMessage = true
                 return
             }
 
             let data = document.data()
             if let redeemed = data["redeemed"] as? Bool, redeemed == true {
-                message = "Voucher already redeemed."
+                message = "Voucher already redeemed"
                 showMessage = true
                 return
             }

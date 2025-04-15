@@ -11,7 +11,7 @@ struct Mission: Identifiable, Codable {
     var expiration: String?
     var imageUrl: String?
     var status: String
-    var steps: [String] = []
+    var steps: [MissionStep] 
     var restaurantId: String?
 }
 
@@ -185,7 +185,11 @@ struct MissionsPageView: View {
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
                                 status: data["status"] as? String ?? "active",
-                                steps: data["steps"] as? [String] ?? [],
+                                steps: (data["steps"] as? [[String: Any]])?.compactMap { stepDict in
+                                    guard let description = stepDict["description"] as? String else { return nil }
+                                    let link = stepDict["link"] as? String ?? ""
+                                    return MissionStep(description: description, link: link)
+                                } ?? [],
                                 restaurantId: restaurantId
                             )
                         }

@@ -133,10 +133,22 @@ struct MissionDetailView: View {
                 .font(.subheadline)
                 .foregroundColor(.blue)
 
-            Text(mission.steps[currentStep])
-                .font(.title3)
-                .multilineTextAlignment(.center)
-                .padding()
+            VStack(spacing: 6) {
+                Text(mission.steps[currentStep].description)
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
+                let link = mission.steps[currentStep].link
+                if !link.isEmpty {
+                    Link("Visit Link", destination: URL(string: link)!)
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                        .underline()
+                        .padding(.top, 4)
+                }
+            }
+            .padding(.vertical)
 
             if let screenshot = stepScreenshots[currentStep] {
                 Image(uiImage: screenshot)
@@ -146,28 +158,48 @@ struct MissionDetailView: View {
                     .cornerRadius(12)
             }
 
-            Button("Upload Screenshot") {
+            Button("Upload Screenshot Verification") {
                 selectedStepIndex = currentStep
                 isImagePickerPresented = true
             }
             .foregroundColor(.blue)
 
-            Button(action: {
-                if currentStep < mission.steps.count - 1 {
-                    currentStep += 1
-                } else {
-                    handleMissionCompletion()
+            HStack(spacing: 16) {
+                // Back step or Exit button
+                Button(action: {
+                    if currentStep == 0 {
+                        dismiss() // Exit to home if it's the first step
+                    } else {
+                        currentStep -= 1 // Go to previous step
+                    }
+                }) {
+                    Text(currentStep == 0 ? "Exit" : "Back")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.3))
+                        .foregroundColor(.blue)
+                        .cornerRadius(12)
                 }
-            }) {
-                Text(currentStep < mission.steps.count - 1 ? "Next Step" : "Complete & Show QR")
-                    .fontWeight(.semibold)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(stepScreenshots[currentStep] == nil ? Color.gray : Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+
+                // Next or Complete button
+                Button(action: {
+                    if currentStep < mission.steps.count - 1 {
+                        currentStep += 1
+                    } else {
+                        handleMissionCompletion()
+                    }
+                }) {
+                    Text(currentStep < mission.steps.count - 1 ? "Next Step" : "Complete & Show QR")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(stepScreenshots[currentStep] == nil ? Color.gray : Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+                .disabled(stepScreenshots[currentStep] == nil)
             }
-            .disabled(stepScreenshots[currentStep] == nil)
         }
         .padding()
         .background(Color.blue.opacity(0.1))
@@ -194,14 +226,14 @@ struct MissionDetailView: View {
             Text("VOUCHER ID").font(.caption).foregroundColor(.gray)
             Text(voucherId).font(.headline).fontWeight(.bold).multilineTextAlignment(.center)
 
-            Button("Done") {
-                dismiss()
+            Button(action: {dismiss()} ) {
+                Text("Done")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(red: 0.0, green: 0.698, blue: 1.0))
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
             }
-            .font(.headline)
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
         }
     }
     

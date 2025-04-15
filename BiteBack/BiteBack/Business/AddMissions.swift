@@ -1,7 +1,15 @@
+// AddMissionView.swift
+// BiteBack
+
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
 import PhotosUI
+
+struct MissionStep: Codable, Hashable {
+    var description: String
+    var link: String
+}
 
 struct AddMissionView: View {
     let restaurantName: String
@@ -12,7 +20,7 @@ struct AddMissionView: View {
     @State private var description: String = ""
     @State private var reward: String = ""
     @State private var expiration: String = ""
-    @State private var steps: [String] = [""]
+    @State private var steps: [MissionStep] = [MissionStep(description: "", link: "")]
     @State private var selectedImage: UIImage?
     @State private var isImagePickerPresented = false
 
@@ -31,22 +39,23 @@ struct AddMissionView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
+
                     GroupBox(label: Text("MISSION DETAILS").fontWeight(.bold)) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Title").font(.caption).foregroundColor(.gray)
-                            TextField("Enter mission title", text: $title)
+                            TextField("Title", text: $title)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
                             Text("Description").font(.caption).foregroundColor(.gray)
-                            TextField("Enter mission description", text: $description)
+                            TextField("Description", text: $description)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
                             Text("Reward").font(.caption).foregroundColor(.gray)
-                            TextField("Enter reward", text: $reward)
+                            TextField("Reward", text: $reward)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                            Text("Expiration Date").font(.caption).foregroundColor(.gray)
-                            TextField("YYYY-MM-DD", text: $expiration)
+                            Text("Expiration Date (YYYY-MM-DD)").font(.caption).foregroundColor(.gray)
+                            TextField("Expiration Date", text: $expiration)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                         .padding(.top, 6)
@@ -55,19 +64,19 @@ struct AddMissionView: View {
                     GroupBox(label: Text("MISSION STEPS").fontWeight(.bold)) {
                         VStack(alignment: .leading, spacing: 12) {
                             ForEach(steps.indices, id: \.self) { index in
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Step \(index + 1)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text("Step \(index + 1)").font(.caption).foregroundColor(.gray)
 
-                                    HStack {
-                                        TextField("Enter step", text: $steps[index])
-                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    TextField("Enter step description", text: $steps[index].description)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                                        if steps.count > 1 {
-                                            Button(action: { steps.remove(at: index) }) {
-                                                Image(systemName: "minus.circle.fill").foregroundColor(.red)
-                                            }
+                                    TextField("Optional link (e.g., Instagram, Yelp)", text: $steps[index].link)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                                    if steps.count > 1 {
+                                        Button(action: { steps.remove(at: index) }) {
+                                            Image(systemName: "minus.circle.fill")
+                                                .foregroundColor(.red)
                                         }
                                     }
                                 }
@@ -75,15 +84,15 @@ struct AddMissionView: View {
 
                             HStack {
                                 Spacer()
-                                Button(action: {
-                                    steps.append("")
-                                }) {
-                                    Label("Add Step", systemImage: "plus.circle.fill")
-                                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
+                                Button(action: { steps.append(MissionStep(description: "", link: "")) }) {
+                                    HStack {
+                                        Image(systemName: "plus.circle.fill")
+                                        Text("Add Step")
+                                    }
+                                    .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                                 }
                                 Spacer()
                             }
-                            .padding(.top, 6)
                         }
                         .padding(.top, 6)
                     }
@@ -111,7 +120,7 @@ struct AddMissionView: View {
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
-                    .disabled(title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty || selectedImage == nil || steps.contains(where: { $0.isEmpty }))
+                    .disabled(title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty || selectedImage == nil || steps.contains(where: { $0.description.isEmpty }))
                 }
             }
         }
@@ -152,6 +161,8 @@ struct AddMissionView: View {
         let db = Firestore.firestore()
         let missionRef = db.collection("restaurants").document(restaurantId).collection("missions").document()
 
+        let formattedSteps = steps.map { ["description": $0.description, "link": $0.link] }
+
         let missionData: [String: Any] = [
             "title": title,
             "description": description,
@@ -159,7 +170,7 @@ struct AddMissionView: View {
             "expiration": expiration,
             "status": "active",
             "imageUrl": imageUrl,
-            "steps": steps.isEmpty ? [""] : steps
+            "steps": formattedSteps
         ]
 
         missionRef.setData(missionData) { _ in
@@ -172,7 +183,7 @@ struct AddMissionView: View {
         description = ""
         reward = ""
         expiration = ""
-        steps = [""]
+        steps = [MissionStep(description: "", link: "")]
         selectedImage = nil
     }
 }
@@ -209,3 +220,4 @@ struct ImagePicker: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
+

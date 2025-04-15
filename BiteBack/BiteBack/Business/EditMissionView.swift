@@ -47,21 +47,24 @@ struct EditMissionView: View {
                             TextField("e.g. active", text: $mission.status)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
-                        .padding(.top, 6) // ← clean space between "MISSION DETAILS" and "Title"
+                        .padding(.top, 6)
                     }
 
                     GroupBox(label: Text("MISSION STEPS").fontWeight(.bold)) {
                         VStack(alignment: .leading, spacing: 12) {
                             ForEach(mission.steps.indices, id: \.self) { index in
-                                VStack(alignment: .leading, spacing: 4) {
+                                VStack(alignment: .leading, spacing: 6) {
                                     Text("Step \(index + 1)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
 
-                                    HStack {
-                                        TextField("Enter step", text: $mission.steps[index])
-                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    TextField("Enter step description", text: $mission.steps[index].description)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
 
+                                    TextField("Optional link (e.g., Instagram, Yelp)", text: $mission.steps[index].link)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                                    if mission.steps.count > 1 {
                                         Button(action: {
                                             mission.steps.remove(at: index)
                                         }) {
@@ -75,7 +78,7 @@ struct EditMissionView: View {
                             HStack {
                                 Spacer()
                                 Button(action: {
-                                    mission.steps.append("")
+                                    mission.steps.append(MissionStep(description: "", link: ""))
                                 }) {
                                     Label("Add Step", systemImage: "plus.circle.fill")
                                         .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
@@ -136,7 +139,7 @@ struct EditMissionView: View {
             "expiration": mission.expiration ?? "",
             "status": mission.status,
             "imageUrl": mission.imageUrl ?? "",
-            "steps": mission.steps
+            "steps": mission.steps.map { ["description": $0.description, "link": $0.link] }
         ]) { _ in
             showUpdateConfirmation = true
         }
