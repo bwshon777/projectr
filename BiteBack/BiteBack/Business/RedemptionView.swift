@@ -1,3 +1,4 @@
+// RedemptionView.swift
 import SwiftUI
 import CodeScanner
 import FirebaseFirestore
@@ -7,14 +8,16 @@ struct RedemptionView: View {
     @State private var scannedCode: String = ""
     @State private var showMessage = false
     @State private var message = ""
-    
+    @State private var missionDocRef: DocumentReference?
+    @State private var stepProofs: [String] = []
+    @State private var navigateToApproval = false
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Redeem Customer Rewards")
                 .font(.title)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .center)
-
 
             Button(action: {
                 isPresentingScanner = true
@@ -35,6 +38,17 @@ struct RedemptionView: View {
                     .multilineTextAlignment(.center)
                     .padding()
             }
+
+            NavigationLink(isActive: $navigateToApproval) {
+                if let docRef = missionDocRef {
+                    ApproveMissionView(documentRef: docRef, stepProofs: stepProofs)
+                } else {
+                    EmptyView()
+                }
+            } label: {
+                EmptyView()
+            }
+
         }
         .padding()
         .sheet(isPresented: $isPresentingScanner) {
@@ -48,14 +62,14 @@ struct RedemptionView: View {
         switch result {
         case .success(let scan):
             scannedCode = scan.string
-            validateAndRedeemVoucher(voucherId: scannedCode)
+            validateVoucher(voucherId: scannedCode)
         case .failure:
             message = "Failed to scan the QR code."
             showMessage = true
         }
     }
 
-    func validateAndRedeemVoucher(voucherId: String) {
+    func validateVoucher(voucherId: String) {
         let db = Firestore.firestore()
         let query = db.collectionGroup("completedMissions").whereField("voucherId", isEqualTo: voucherId)
 
@@ -79,17 +93,9 @@ struct RedemptionView: View {
                 return
             }
 
-            document.reference.updateData(["redeemed": true]) { err in
-                if let err = err {
-                    message = "Error redeeming voucher: \(err.localizedDescription)"
-                } else {
-                    message = "Voucher redeemed successfully!"
-                }
-                showMessage = true
-            }
+            self.stepProofs = data["stepProofs"] as? [String] ?? []
+            self.missionDocRef = document.reference
+            self.navigateToApproval = true
         }
     }
 }
-
-
-

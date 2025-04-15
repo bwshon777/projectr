@@ -31,6 +31,8 @@ struct SignUpView: View {
     @State private var personalEmail: String = ""
     @State private var personalPhone: String = ""
     @State private var personalPassword: String = ""
+    @State private var personalConfirmPassword: String = ""
+
     
     // Business sign-up fields.
     @State private var businessName: String = ""
@@ -39,8 +41,8 @@ struct SignUpView: View {
     @State private var businessStreet: String = ""
     @State private var businessCity: String = ""
     @State private var businessState: String = ""
-    
     @State private var businessPassword: String = ""
+    @State private var businessConfirmPassword: String = ""
     @State private var verifyBusiness: Bool = false
     
     // Common state for both forms.
@@ -134,6 +136,7 @@ struct SignUpView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .personalName)
+
                 TextField("Email", text: $personalEmail)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
@@ -141,23 +144,32 @@ struct SignUpView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .personalEmail)
+
                 TextField("Phone", text: $personalPhone)
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .personalPhone)
+
                 SecureField("Password", text: $personalPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .personalPassword)
+
+                SecureField("Confirm Password", text: $personalConfirmPassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+
             } else {
                 TextField("Business Name", text: $businessName)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessName)
+
                 TextField("Email", text: $businessEmail)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
@@ -165,35 +177,46 @@ struct SignUpView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessEmail)
+
                 TextField("Business Street Address", text: $businessStreet)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessStreet)
+
                 TextField("Business City", text: $businessCity)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessCity)
+
                 TextField("Business State", text: $businessState)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessState)
+
                 TextField("Phone", text: $businessPhone)
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessPhone)
+
                 SecureField("Password", text: $businessPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                     .focused($focusedField, equals: .businessPassword)
+
+                SecureField("Confirm Password", text: $businessConfirmPassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
             }
         }
     }
+
     
     // MARK: - Business Verification Toggle (only in Business mode)
     var businessVerificationToggle: some View {
@@ -240,6 +263,16 @@ struct SignUpView: View {
             return
         }
         errorMessage = ""
+        
+        if selectedMode == .personal && personalPassword != personalConfirmPassword {
+            errorMessage = "Passwords do not match."
+            return
+        }
+
+        if selectedMode == .business && businessPassword != businessConfirmPassword {
+            errorMessage = "Passwords do not match."
+            return
+        }
         
         // Choose fields based on selected mode.
         let emailToUse = selectedMode == .personal ? personalEmail : businessEmail
@@ -296,47 +329,6 @@ struct SignUpView: View {
             }
         }
     }
-    
-    //    // MARK: - Sample Data for MissionsPageView
-    //    var sampleRestaurants: [Restaurant] {
-    //        let sampleMissions1 = [
-    //            Mission(title: "Try Our Taco",
-    //                    description: "Order our famous taco dish to earn a free appetizer.",
-    //                    reward: "Free Appetizer",
-    //                    imageName: "taco"),
-    //            Mission(title: "Bring a Friend",
-    //                    description: "Bring a friend along and get 20% off your meal.",
-    //                    reward: "20% Off",
-    //                    imageName: "food2")
-    //        ]
-    //        let sampleMissions2 = [
-    //            Mission(title: "Happy Hour",
-    //                    description: "Join our happy hour to enjoy special discounts.",
-    //                    reward: "Discounted Drinks",
-    //                    imageName: "cocktail"),
-    //            Mission(title: "Loyalty Challenge",
-    //                    description: "Visit 5 times this month to earn a free meal.",
-    //                    reward: "Free Meal",
-    //                    imageName: "food4")
-    //        ]
-    //        let sampleMissions3 = [
-    //            Mission(title: "Family Fiesta",
-    //                    description: "Bring your family and dine together for a special discount.",
-    //                    reward: "Family Discount",
-    //                    imageName: "sushi"),
-    //            Mission(title: "Weekend Special",
-    //                    description: "Dine during the weekend to earn bonus rewards.",
-    //                    reward: "Bonus Rewards",
-    //                    imageName: "food6")
-    //        ]
-    //
-    //        let restaurant1 = Restaurant(name: "Oscars Taco Shop", missions: sampleMissions1)
-    //        let restaurant2 = Restaurant(name: "Bella Italia", missions: sampleMissions2)
-    //        let restaurant3 = Restaurant(name: "Sushi Zen", missions: sampleMissions3)
-    //
-    //        return [restaurant1, restaurant2, restaurant3]
-    //    }
-    //}
     
     struct SignUpView_Previews: PreviewProvider {
         static var previews: some View {
