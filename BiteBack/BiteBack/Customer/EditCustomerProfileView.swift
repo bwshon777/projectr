@@ -17,22 +17,34 @@ struct EditCustomerProfileView: View {
             VStack(spacing: 20) {
                 Spacer().frame(height: 20)
 
-                Text("Edit Profile")
-                    .font(.largeTitle)
-                    .bold()
+                HStack {
+                    Text("Edit Profile")
+                        .font(.largeTitle)
+                        .bold()
+                    Spacer()
+                }
 
-                VStack(spacing: 16) {
-                    TextField("Name", text: $name)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Name").font(.caption).foregroundColor(.gray)
+                        TextField("Enter name", text: $name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                    TextField("Email", text: $email)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Email").font(.caption).foregroundColor(.gray)
+                        TextField("Enter email", text: $email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                    }
 
-                    TextField("Phone", text: $phone)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.phonePad)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Phone").font(.caption).foregroundColor(.gray)
+                        TextField("Enter phone", text: $phone)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.phonePad)
+                    }
                 }
                 .padding()
 

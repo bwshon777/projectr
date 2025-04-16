@@ -69,11 +69,13 @@ struct MissionCard: View {
             if let status = statusText {
                 Text(status)
                     .font(.caption2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
                     .padding(.vertical, 4)
                     .padding(.horizontal, 8)
-                    .background(Color.black.opacity(0.75))
-                    .foregroundColor(.white)
+                    .background(status == "REDEEMED" ? Color.red : Color.black.opacity(0.75))
                     .clipShape(Capsule())
+                    .fixedSize(horizontal: true, vertical: false)
                     .padding(8)
             }
         }
