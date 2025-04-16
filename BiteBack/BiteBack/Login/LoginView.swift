@@ -33,18 +33,24 @@ struct LoginView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)
-                .padding(.top, 80)
+                .padding(.top, 100)
                 .padding(.bottom, 20)
+            
+            Text("BiteBack")
+                .font(.system(size: 40))
+                .bold()
+                .padding(.top, -40)
 
             // Title and subtitle
             VStack(alignment: .leading, spacing: 10) {
                 Text("Login")
-                    .font(.largeTitle)
+                    .font(.system(size: 25))
                     .bold()
                 Text("Please sign in to continue")
                     .foregroundColor(.gray)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, -10)
 
             // Email TextField
             TextField("Email", text: $email)
