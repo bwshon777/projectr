@@ -209,7 +209,7 @@ struct MissionDetailView: View {
 
     var qrCodeView: some View {
         VStack(spacing: 20) {
-            Text("Show this QR code to redeem your reward")
+            Text("Use this QR code to redeem your reward!")
                 .font(.headline)
                 .multilineTextAlignment(.center)
                 .padding()

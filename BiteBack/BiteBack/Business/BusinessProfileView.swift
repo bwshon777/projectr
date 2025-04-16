@@ -24,7 +24,7 @@ struct BusinessProfileView: View {
                 List {
                     ForEach($missions) { $mission in
                         NavigationLink(
-                            destination: EditMissionView(mission: $mission, restaurantId: getRestaurantId())
+                            destination: MissionOverviewView(mission: $mission, restaurantId: getRestaurantId())
                         ) {
                             VStack(alignment: .leading) {
                                 Text(mission.title)
