@@ -33,18 +33,24 @@ struct LoginView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)
-                .padding(.top, 80)
+                .padding(.top, 100)
                 .padding(.bottom, 20)
+            
+            Text("BiteBack")
+                .font(.system(size: 40))
+                .bold()
+                .padding(.top, -40)
 
             // Title and subtitle
             VStack(alignment: .leading, spacing: 10) {
                 Text("Login")
-                    .font(.largeTitle)
+                    .font(.system(size: 25))
                     .bold()
                 Text("Please sign in to continue")
                     .foregroundColor(.gray)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, -10)
 
             // Email TextField
             TextField("Email", text: $email)
@@ -161,23 +167,8 @@ struct LoginView: View {
         }
 
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error as NSError? {
-                 switch AuthErrorCode(rawValue: error.code) {
-                 case .invalidEmail:
-                     errorMessage = "The email address is badly formatted"
-                 case .wrongPassword:
-                     errorMessage = "The password is incorrect - Please try again"
-                 case .userNotFound:
-                     errorMessage = "No account found with this email"
-                 case .userDisabled:
-                     errorMessage = "This account has been disabled"
-                 default:
-                     if error.code == AuthErrorCode.invalidCredential.rawValue {
-                         errorMessage = "The email or password is incorrect"
-                     } else {
-                         errorMessage = error.localizedDescription
-                     }
-                 }
+            if let error = error {
+                errorMessage = error.localizedDescription
                 return
             }
 
@@ -215,4 +206,3 @@ struct LoginView_Previews: PreviewProvider {
         }
     }
 }
-
