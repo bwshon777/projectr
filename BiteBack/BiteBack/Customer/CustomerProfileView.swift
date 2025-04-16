@@ -23,7 +23,7 @@ struct CustomerProfileView: View {
                 .clipShape(RoundedCornerShape(corners: [.bottomLeft, .bottomRight], radius: 40))
                 .ignoresSafeArea(edges: .top)
 
-                Text(name.isEmpty ? "Your Name" : name)
+                Text("Your Profile!")
                     .font(.title)
                     .foregroundColor(.white)
                     .bold()

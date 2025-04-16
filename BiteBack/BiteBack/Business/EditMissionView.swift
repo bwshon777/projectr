@@ -3,12 +3,15 @@ import FirebaseFirestore
 
 struct EditMissionView: View {
     @Binding var mission: Mission
+    @Binding var shouldDismissToBusiness: Bool
+
     let restaurantId: String
 
     @Environment(\.dismiss) var dismiss
 
     @State private var showUpdateConfirmation = false
     @State private var showDeleteConfirmation = false
+    
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -149,6 +152,7 @@ struct EditMissionView: View {
         guard let missionId = mission.id else { return }
         let db = Firestore.firestore()
         db.collection("restaurants").document(restaurantId).collection("missions").document(missionId).delete { _ in
+            shouldDismissToBusiness = true
             dismiss()
         }
     }

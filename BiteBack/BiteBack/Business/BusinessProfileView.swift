@@ -5,7 +5,7 @@ struct BusinessProfileView: View {
     var businessName: String
     @State private var missions: [Mission] = []
     @State private var restaurantId: String = ""
-
+    
     var body: some View {
             VStack {
                 // Business Header
@@ -24,7 +24,7 @@ struct BusinessProfileView: View {
                 List {
                     ForEach($missions) { $mission in
                         NavigationLink(
-                            destination: EditMissionView(mission: $mission, restaurantId: getRestaurantId())
+                            destination: MissionStatsView(mission: $mission, restaurantId: getRestaurantId())
                         ) {
                             VStack(alignment: .leading) {
                                 Text(mission.title)

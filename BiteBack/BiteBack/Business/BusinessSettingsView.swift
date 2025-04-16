@@ -28,7 +28,7 @@ struct BusinessSettingsView: View {
                     .clipShape(RoundedCornerShape(corners: [.bottomLeft, .bottomRight], radius: 40))
                     .ignoresSafeArea(edges: .top)
 
-                    Text(businessName.isEmpty ? "Your Business" : businessName)
+                    Text("Your Profile!")
                         .font(.title)
                         .foregroundColor(.white)
                         .bold()

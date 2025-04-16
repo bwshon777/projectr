@@ -10,6 +10,7 @@
 		01636E542D8A8E1E00ACC294 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E412D8A8E1E00ACC294 /* AppDelegate.swift */; };
 		01636E582D8A8E3C00ACC294 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */; };
 		01E621462D62EE1A00A75822 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E621452D62EE1A00A75822 /* GoogleService-Info.plist */; };
+		0B4533AC2DAF4C4B00CEE52C /* MissionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4533AB2DAF4C4000CEE52C /* MissionStatsView.swift */; };
 		0B78E8AF2DAD9E8400B9ADEE /* EditCustomerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E89E2DAD9E8400B9ADEE /* EditCustomerProfileView.swift */; };
 		0B78E8B02DAD9E8400B9ADEE /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E8A02DAD9E8400B9ADEE /* MapView.swift */; };
 		0B78E8B12DAD9E8400B9ADEE /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */; };
@@ -68,6 +69,7 @@
 		01636E412D8A8E1E00ACC294 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		01E621452D62EE1A00A75822 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0B4533AB2DAF4C4000CEE52C /* MissionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionStatsView.swift; sourceTree = "<group>"; };
 		0B78E8942DAD9E8400B9ADEE /* AddMissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMissions.swift; sourceTree = "<group>"; };
 		0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
 		0B78E8962DAD9E8400B9ADEE /* BusinessSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessSettingsView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 		0B78E89B2DAD9E8400B9ADEE /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				0B4533AB2DAF4C4000CEE52C /* MissionStatsView.swift */,
 				0BD33F682DAE22C400E3A797 /* ApproveMissionView.swift */,
 				0B78E8942DAD9E8400B9ADEE /* AddMissions.swift */,
 				0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */,
@@ -343,6 +346,7 @@
 				0B78E8B62DAD9E8400B9ADEE /* MissionsView.swift in Sources */,
 				0B78E8B72DAD9E8400B9ADEE /* BusinessSettingsView.swift in Sources */,
 				0B78E8B82DAD9E8400B9ADEE /* ExploreView.swift in Sources */,
+				0B4533AC2DAF4C4B00CEE52C /* MissionStatsView.swift in Sources */,
 				0B78E8B92DAD9E8400B9ADEE /* EditMissionView.swift in Sources */,
 				0B78E8BA2DAD9E8400B9ADEE /* SignUpView.swift in Sources */,
 				0B78E8BB2DAD9E8400B9ADEE /* LoginView.swift in Sources */,
