@@ -1,10 +1,3 @@
-//
-//  MissionsView.swift
-//  BiteBack
-//
-//  Created by Nicholas Pacella on 2/2/25.
-//
-
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
@@ -18,20 +11,8 @@ struct Mission: Identifiable, Codable {
     var expiration: String?
     var imageUrl: String?
     var status: String
-    var steps: [String] = []
+    var steps: [MissionStep] 
     var restaurantId: String?
-
-    init(id: String? = nil, title: String, description: String, reward: String, expiration: String? = nil, imageUrl: String? = nil, status: String, steps: [String]? = nil, restaurantId: String? = nil) {
-        self.id = id
-        self.title = title
-        self.description = description
-        self.reward = reward
-        self.expiration = expiration
-        self.imageUrl = imageUrl
-        self.status = status
-        self.steps = steps ?? []
-        self.restaurantId = restaurantId
-    }
 }
 
 struct Restaurant: Identifiable {
@@ -43,10 +24,11 @@ struct Restaurant: Identifiable {
 struct MissionCard: View {
     let mission: Mission
     let backgroundColor: Color
-    let isRedeemed: Bool
+    let statusText: String?
+    let isDimmed: Bool
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .topTrailing) {
             HStack(alignment: .center, spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(mission.title)
@@ -63,6 +45,7 @@ struct MissionCard: View {
                         .foregroundColor(.gray)
                         .lineLimit(2)
                 }
+
                 Spacer()
 
                 if let urlStr = mission.imageUrl, let url = URL(string: urlStr) {
@@ -81,17 +64,19 @@ struct MissionCard: View {
             .background(backgroundColor)
             .cornerRadius(20)
             .shadow(radius: 3)
-            .opacity(isRedeemed ? 0.4 : 1.0)
+            .opacity(isDimmed ? 0.4 : 1.0)
 
-            if isRedeemed {
-                Text("REDEEMED")
+            if let status = statusText {
+                Text(status)
                     .font(.caption2)
-                    .fontWeight(.bold)
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .padding(6)
-                    .background(Color.red)
-                    .cornerRadius(8)
-                    .padding([.top, .leading], 8)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(status == "REDEEMED" ? Color.red : Color.black.opacity(0.75))
+                    .clipShape(Capsule())
+                    .fixedSize(horizontal: true, vertical: false)
+                    .padding(8)
             }
         }
     }
@@ -103,6 +88,7 @@ struct MissionsPageView: View {
 
     @State private var restaurants: [Restaurant] = []
     @State private var restaurantColors: [String: Color] = [:]
+    @State private var completedMissionIds: Set<String> = []
     @State private var redeemedMissionIds: Set<String> = []
 
     let pastelColors: [Color] = [
@@ -121,7 +107,7 @@ struct MissionsPageView: View {
                     Text("Welcome")
                         .font(.title)
                         .foregroundColor(.gray)
-                    + Text(" \(userName)!")
+                    + Text(" \(firstNameOnly(from: userName))!")
                         .font(.title)
                         .bold()
                 }
@@ -134,13 +120,18 @@ struct MissionsPageView: View {
                             .bold()
 
                         ForEach(restaurant.missions) { mission in
+                            let isCompleted = completedMissionIds.contains(mission.id ?? "")
                             let isRedeemed = redeemedMissionIds.contains(mission.id ?? "")
 
+                            let tag = isRedeemed ? "REDEEMED" : (isCompleted ? "COMPLETED" : nil)
+                            let dimmed = isRedeemed
+
                             if isRedeemed {
-                                MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray, isRedeemed: true)
+                                // Show greyed out, no navigation
+                                MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? .gray, statusText: tag, isDimmed: dimmed)
                             } else {
                                 NavigationLink(destination: MissionDetailView(mission: mission)) {
-                                    MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? Color.gray, isRedeemed: false)
+                                    MissionCard(mission: mission, backgroundColor: restaurantColors[restaurant.name] ?? .gray, statusText: tag, isDimmed: dimmed)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
@@ -152,10 +143,14 @@ struct MissionsPageView: View {
         }
         .onAppear {
             fetchMissions()
-            fetchRedeemedMissions()
+            fetchCompletedStatuses()
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+    }
+    
+    func firstNameOnly(from fullName: String) -> String {
+        return fullName.components(separatedBy: " ").first ?? fullName
     }
 
     func fetchMissions() {
@@ -192,10 +187,15 @@ struct MissionsPageView: View {
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
                                 status: data["status"] as? String ?? "active",
-                                steps: data["steps"] as? [String] ?? [],
+                                steps: (data["steps"] as? [[String: Any]])?.compactMap { stepDict in
+                                    guard let description = stepDict["description"] as? String else { return nil }
+                                    let link = stepDict["link"] as? String ?? ""
+                                    return MissionStep(description: description, link: link)
+                                } ?? [],
                                 restaurantId: restaurantId
                             )
                         }
+
                         let restaurant = Restaurant(name: name, missions: missions)
                         fetchedRestaurants.append(restaurant)
                     }
@@ -209,13 +209,29 @@ struct MissionsPageView: View {
         }
     }
 
-    func fetchRedeemedMissions() {
+    func fetchCompletedStatuses() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
+
         let db = Firestore.firestore()
         db.collection("users").document(userId).collection("completedMissions").getDocuments { snapshot, error in
-            guard let documents = snapshot?.documents else { return }
-            let redeemedIds = documents.filter { ($0.data()["redeemed"] as? Bool) == true }.compactMap { $0.documentID }
-            self.redeemedMissionIds = Set(redeemedIds)
+            if let error = error {
+                print("Error fetching completed missions: \(error.localizedDescription)")
+                return
+            }
+
+            var completed: Set<String> = []
+            var redeemed: Set<String> = []
+
+            snapshot?.documents.forEach { doc in
+                completed.insert(doc.documentID)
+                let data = doc.data()
+                if let isRedeemed = data["redeemed"] as? Bool, isRedeemed {
+                    redeemed.insert(doc.documentID)
+                }
+            }
+
+            self.completedMissionIds = completed
+            self.redeemedMissionIds = redeemed
         }
     }
 }

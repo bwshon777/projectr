@@ -34,6 +34,8 @@
 		0B78E8C42DAD9E8400B9ADEE /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E8A62DAD9E8400B9ADEE /* ForgotPasswordView.swift */; };
 		0B78E8C52DAD9E8400B9ADEE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B78E8AD2DAD9E8400B9ADEE /* Preview Assets.xcassets */; };
 		0B78E8C82DAD9F2C00B9ADEE /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 0B78E8C72DAD9F2C00B9ADEE /* CodeScanner */; };
+		0B9779CB2DAFF69B00688175 /* MissionOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9779CA2DAFF68700688175 /* MissionOverviewView.swift */; };
+		0BD33F692DAE22CC00E3A797 /* ApproveMissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD33F682DAE22C400E3A797 /* ApproveMissionView.swift */; };
 		4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F094F2D50716400C143B0 /* Assets.xcassets */; };
 		4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B1F09522D50716400C143B0 /* Preview Assets.xcassets */; };
 		4B1F09612D50744900C143B0 /* BiteBackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1F09602D50744900C143B0 /* BiteBackApp.swift */; };
@@ -90,6 +92,8 @@
 		0B78E8AA2DAD9E8400B9ADEE /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		0B78E8AB2DAD9E8400B9ADEE /* ValidationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationExtensions.swift; sourceTree = "<group>"; };
 		0B78E8AD2DAD9E8400B9ADEE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0B9779CA2DAFF68700688175 /* MissionOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionOverviewView.swift; sourceTree = "<group>"; };
+		0BD33F682DAE22C400E3A797 /* ApproveMissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApproveMissionView.swift; sourceTree = "<group>"; };
 		4B1F09482D50716300C143B0 /* BiteBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BiteBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1F094F2D50716400C143B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B1F09522D50716400C143B0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -136,6 +140,8 @@
 		0B78E89B2DAD9E8400B9ADEE /* Business */ = {
 			isa = PBXGroup;
 			children = (
+				0B9779CA2DAFF68700688175 /* MissionOverviewView.swift */,
+				0BD33F682DAE22C400E3A797 /* ApproveMissionView.swift */,
 				0B78E8942DAD9E8400B9ADEE /* AddMissions.swift */,
 				0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */,
 				0B78E8962DAD9E8400B9ADEE /* BusinessSettingsView.swift */,
@@ -345,6 +351,8 @@
 				0B78E8BB2DAD9E8400B9ADEE /* LoginView.swift in Sources */,
 				0B78E8BC2DAD9E8400B9ADEE /* ValidationExtensions.swift in Sources */,
 				0B78E8BD2DAD9E8400B9ADEE /* AddMissions.swift in Sources */,
+				0BD33F692DAE22CC00E3A797 /* ApproveMissionView.swift in Sources */,
+				0B9779CB2DAFF69B00688175 /* MissionOverviewView.swift in Sources */,
 				0B78E8BE2DAD9E8400B9ADEE /* MissionDetailView.swift in Sources */,
 				0B78E8BF2DAD9E8400B9ADEE /* ContentView.swift in Sources */,
 				0B78E8C02DAD9E8400B9ADEE /* EditBusinessSettingsView.swift in Sources */,

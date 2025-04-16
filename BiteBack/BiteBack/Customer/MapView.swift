@@ -62,20 +62,30 @@ struct MapView: View {
                data["businessStreet"] != nil &&
                data["businessCity"] != nil &&
                data["businessState"] != nil
+        
     }
 
     func parseBusiness(from data: [String: Any]) -> (String, String, String, String)? {
         guard
-            let name = data["businessName"] as? String,
-            let street = data["businessStreet"] as? String,
-            let city = data["businessCity"] as? String,
-            let state = data["businessState"] as? String
+            let name = data["businessName"],
+            let street = data["businessStreet"],
+            let city = data["businessCity"],
+            let state = data["businessState"]
         else {
+            print("❌ Missing field in: \(data)")
             return nil
         }
-        return (name, street, city, state)
-    }
 
+        let nameStr = String(describing: name)
+        let streetStr = String(describing: street)
+        let cityStr = String(describing: city)
+        let stateStr = String(describing: state)
+
+        print("✅ Parsed business: name=\(nameStr), street=\(streetStr), city=\(cityStr), state=\(stateStr)")
+
+        return (nameStr, streetStr, cityStr, stateStr)
+    }
+    
     func fetchBusinessLocations() {
         let db = Firestore.firestore()
         businessLocations = []
@@ -85,27 +95,50 @@ struct MapView: View {
             .getDocuments { snapshot, error in
                 if let error = error {
                     print("Error fetching users: \(error.localizedDescription)")
+                    isLoading = false
                     return
                 }
 
                 guard let documents = snapshot?.documents else {
                     print("No user documents found.")
+                    isLoading = false
                     return
                 }
 
-                for (index, document) in documents.enumerated() {
+                var validBusinesses: [(String, String, String, String)] = []
+
+                for document in documents {
                     let data = document.data()
-                    guard isValidBusinessData(data), let (name, street, city, state) = parseBusiness(from: data) else {
-                        print("Skipping document: invalid business data")
+                    print("Raw data:", data)
+
+                    guard data["mode"] as? String == "business" else {
                         continue
                     }
 
+                    if let (name, street, city, state) = parseBusiness(from: data) {
+                        validBusinesses.append((name, street, city, state))
+                    } else {
+                        print("Skipping document: invalid business data")
+                    }
+                }
+
+                if validBusinesses.isEmpty {
+                    print("❌ No valid business addresses to geocode.")
+                    isLoading = false
+                    return
+                }
+
+                var completedCount = 0
+                for (i, (name, street, city, state)) in validBusinesses.enumerated() {
                     let address = "\(street), \(city), \(state)"
                         .trimmingCharacters(in: .whitespacesAndNewlines)
                         .replacingOccurrences(of: "’", with: "'")
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.4) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.4) {
+                        print("📍 Attempting to geocode:", address)
                         geocodeAddress(address) { coordinate in
+                            completedCount += 1
+
                             if let coordinate = coordinate {
                                 let location = BusinessLocation(
                                     name: name,
@@ -114,16 +147,17 @@ struct MapView: View {
                                     businessCity: city,
                                     businessState: state
                                 )
-
                                 DispatchQueue.main.async {
                                     businessLocations.append(location)
-                                    if index == documents.count - 1 {
-                                        isLoading = false
-                                    }
+                                    print("🟢 Added to map: \(name)")
                                 }
                             } else {
-                                print("Failed to geocode: \(address)")
-                                if index == documents.count - 1 {
+                                print("❌ Geocoding failed for: \(address)")
+                            }
+
+                            if completedCount == validBusinesses.count {
+                                DispatchQueue.main.async {
+                                    print("✅ All geocoding complete. Found \(businessLocations.count) locations.")
                                     isLoading = false
                                 }
                             }
@@ -132,6 +166,7 @@ struct MapView: View {
                 }
             }
     }
+
 
     func geocodeAddress(_ address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
         geocoder.geocodeAddressString(address) { placemarks, error in
@@ -222,7 +257,7 @@ struct MapView: View {
                     UserAnnotation()
 
                     ForEach(businessLocations) { location in
-                        Annotation(location.name, coordinate: location.coordinate) {
+                        Annotation("", coordinate: location.coordinate) {
                             VStack(spacing: 4) {
                                 Button(action: {
                                     selectedBusiness = location
@@ -340,3 +375,4 @@ struct MapView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+

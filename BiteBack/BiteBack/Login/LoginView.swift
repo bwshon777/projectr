@@ -167,8 +167,23 @@ struct LoginView: View {
         }
 
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                errorMessage = error.localizedDescription
+            if let error = error as NSError? {
+                 switch AuthErrorCode(rawValue: error.code) {
+                 case .invalidEmail:
+                     errorMessage = "The email address is badly formatted"
+                 case .wrongPassword:
+                     errorMessage = "The password is incorrect - Please try again"
+                 case .userNotFound:
+                     errorMessage = "No account found with this email"
+                 case .userDisabled:
+                     errorMessage = "This account has been disabled"
+                 default:
+                     if error.code == AuthErrorCode.invalidCredential.rawValue {
+                         errorMessage = "The email or password is incorrect"
+                     } else {
+                         errorMessage = error.localizedDescription
+                     }
+                 }
                 return
             }
 

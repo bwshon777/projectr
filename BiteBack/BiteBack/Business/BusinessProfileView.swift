@@ -24,7 +24,7 @@ struct BusinessProfileView: View {
                 List {
                     ForEach($missions) { $mission in
                         NavigationLink(
-                            destination: EditMissionView(mission: $mission, restaurantId: getRestaurantId())
+                            destination: MissionOverviewView(mission: $mission, restaurantId: getRestaurantId())
                         ) {
                             VStack(alignment: .leading) {
                                 Text(mission.title)
@@ -102,7 +102,11 @@ struct BusinessProfileView: View {
                                 expiration: data["expiration"] as? String,
                                 imageUrl: data["imageUrl"] as? String,
                                 status: data["status"] as? String ?? "active",
-                                steps: data["steps"] as? [String] ?? []
+                                steps: (data["steps"] as? [[String: Any]])?.compactMap { stepDict in
+                                    guard let description = stepDict["description"] as? String else { return nil }
+                                    let link = stepDict["link"] as? String ?? ""
+                                    return MissionStep(description: description, link: link)
+                                } ?? []
                             )
                         }
                     }

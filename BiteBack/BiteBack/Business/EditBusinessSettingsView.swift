@@ -26,28 +26,64 @@ struct EditBusinessSettingsView: View {
             }
             .padding(.horizontal)
 
-            Text("Edit Profile")
-                .font(.largeTitle)
-                .bold()
+            HStack {
+                Text("Edit Profile")
+                    .font(.largeTitle)
+                    .bold()
+                Spacer()
+            }
+            .padding(.horizontal)
 
             VStack(spacing: 16) {
-                TextField("Business Name", text: $businessName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Group {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Business Name")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter business name", text: $businessName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                TextField("Email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Email")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter email", text: $email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                TextField("Phone", text: $phone)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Phone")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter phone number", text: $phone)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                TextField("Street", text: $street)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Street")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter street address", text: $street)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                TextField("City", text: $city)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("City")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter city", text: $city)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
 
-                TextField("State", text: $state)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("State")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                        TextField("Enter state", text: $state)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                }
             }
             .padding()
 
@@ -64,7 +100,7 @@ struct EditBusinessSettingsView: View {
                     Text("Save")
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -107,4 +143,3 @@ struct EditBusinessSettingsView: View {
         }
     }
 }
-

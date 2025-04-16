@@ -6,6 +6,11 @@ import FirebaseFirestore
 import FirebaseStorage
 import PhotosUI
 
+struct MissionStep: Codable, Hashable {
+    var description: String
+    var link: String
+}
+
 struct AddMissionView: View {
     let restaurantName: String
 
@@ -15,13 +20,12 @@ struct AddMissionView: View {
     @State private var description: String = ""
     @State private var reward: String = ""
     @State private var expiration: String = ""
-    @State private var steps: [String] = [""]
+    @State private var steps: [MissionStep] = [MissionStep(description: "", link: "")]
     @State private var selectedImage: UIImage?
     @State private var isImagePickerPresented = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Custom Back Button
             Button(action: { dismiss() }) {
                 Image(systemName: "arrow.left")
                     .foregroundColor(.gray)
@@ -36,57 +40,89 @@ struct AddMissionView: View {
                 VStack(alignment: .leading, spacing: 16) {
 
                     GroupBox(label: Text("MISSION DETAILS").fontWeight(.bold)) {
-                        TextField("Title", text: $title)
-                        TextField("Description", text: $description)
-                        TextField("Reward", text: $reward)
-                        TextField("Expiration Date (YYYY-MM-DD)", text: $expiration)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Title").font(.caption).foregroundColor(.gray)
+                            TextField("Title", text: $title)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Description").font(.caption).foregroundColor(.gray)
+                            TextField("Description", text: $description)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Reward").font(.caption).foregroundColor(.gray)
+                            TextField("Reward", text: $reward)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            Text("Expiration Date (YYYY-MM-DD)").font(.caption).foregroundColor(.gray)
+                            TextField("Expiration Date", text: $expiration)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        .padding(.top, 6)
                     }
 
                     GroupBox(label: Text("MISSION STEPS").fontWeight(.bold)) {
-                        if !steps.isEmpty {
-                            ForEach(steps.indices, id: \ .self) { index in
-                                HStack {
-                                    TextField("Step \(index + 1)", text: $steps[index])
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(steps.indices, id: \.self) { index in
+                                VStack(alignment: .leading, spacing: 6) {
+                                    Text("Step \(index + 1)").font(.caption).foregroundColor(.gray)
+
+                                    TextField("Enter step description", text: $steps[index].description)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                                    TextField("Optional link (e.g., Instagram, Yelp)", text: $steps[index].link)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
                                     if steps.count > 1 {
                                         Button(action: { steps.remove(at: index) }) {
-                                            Image(systemName: "minus.circle.fill").foregroundColor(.red)
+                                            Image(systemName: "minus.circle.fill")
+                                                .foregroundColor(.red)
                                         }
                                     }
                                 }
                             }
-                        }
-                        Button(action: { steps.append("") }) {
+
                             HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Add Step")
-                            }.foregroundColor(.blue)
+                                Spacer()
+                                Button(action: { steps.append(MissionStep(description: "", link: "")) }) {
+                                    HStack {
+                                        Image(systemName: "plus.circle.fill")
+                                        Text("Add Step")
+                                    }
+                                    .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
+                                }
+                                Spacer()
+                            }
                         }
+                        .padding(.top, 6)
                     }
 
                     GroupBox(label: Text("UPLOAD IMAGE").fontWeight(.bold)) {
-                        if let image = selectedImage {
+                        if let image = selectedImage, image.size.width > 0, image.size.height > 0 {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 150)
                                 .cornerRadius(12)
+                        } else if selectedImage != nil {
+                            Text("Selected image is invalid.")
+                                .foregroundColor(.red)
                         }
 
                         Button("Select Image") {
                             isImagePickerPresented.toggle()
                         }
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color(red: 0.0, green: 0.698, blue: 1.0))
                     }
 
                     Button(action: addMission) {
                         Text("Add Mission")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color(red: 0.0, green: 0.698, blue: 1.0))
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
-                    .disabled(title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty || selectedImage == nil || steps.contains(where: { $0.isEmpty }))
+                    .disabled(title.isEmpty || description.isEmpty || reward.isEmpty || expiration.isEmpty || selectedImage == nil || steps.contains(where: { $0.description.isEmpty }))
                 }
             }
         }
@@ -102,22 +138,38 @@ struct AddMissionView: View {
         let restaurantRef = db.collection("restaurants")
 
         restaurantRef.whereField("name", isEqualTo: restaurantName).getDocuments { (snapshot, error) in
-            if let snapshot = snapshot, let doc = snapshot.documents.first {
-                uploadImage(restaurantId: doc.documentID)
+            if let error = error {
+                print("Error fetching restaurant: \(error.localizedDescription)")
+                return
             }
+
+            guard let snapshot = snapshot, let doc = snapshot.documents.first else {
+                print("No matching restaurant found.")
+                return
+            }
+
+            uploadImage(restaurantId: doc.documentID)
         }
     }
 
     func uploadImage(restaurantId: String) {
-        guard let imageData = selectedImage?.jpegData(compressionQuality: 0.8) else { return }
+        guard let imageData = selectedImage?.jpegData(compressionQuality: 0.8) else {
+            print("Failed to get image data.")
+            return
+        }
 
         let storageRef = Storage.storage().reference().child("missions/\(UUID().uuidString).jpg")
         storageRef.putData(imageData, metadata: nil) { _, error in
-            if error == nil {
-                storageRef.downloadURL { url, _ in
-                    if let imageUrl = url?.absoluteString {
-                        addMissionToRestaurant(restaurantId: restaurantId, imageUrl: imageUrl)
-                    }
+            if let error = error {
+                print("Upload error: \(error.localizedDescription)")
+                return
+            }
+
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Failed to get download URL: \(error.localizedDescription)")
+                } else if let imageUrl = url?.absoluteString {
+                    addMissionToRestaurant(restaurantId: restaurantId, imageUrl: imageUrl)
                 }
             }
         }
@@ -127,6 +179,8 @@ struct AddMissionView: View {
         let db = Firestore.firestore()
         let missionRef = db.collection("restaurants").document(restaurantId).collection("missions").document()
 
+        let formattedSteps = steps.map { ["description": $0.description, "link": $0.link] }
+
         let missionData: [String: Any] = [
             "title": title,
             "description": description,
@@ -134,11 +188,16 @@ struct AddMissionView: View {
             "expiration": expiration,
             "status": "active",
             "imageUrl": imageUrl,
-            "steps": steps.isEmpty ? [""] : steps
+            "steps": formattedSteps
         ]
 
-        missionRef.setData(missionData) { _ in
-            dismiss()
+        missionRef.setData(missionData) { error in
+            if let error = error {
+                print("Error writing mission: \(error.localizedDescription)")
+            } else {
+                print("Mission successfully written.")
+                dismiss()
+            }
         }
     }
 
@@ -147,45 +206,44 @@ struct AddMissionView: View {
         description = ""
         reward = ""
         expiration = ""
-        steps = [""]
+        steps = [MissionStep(description: "", link: "")]
         selectedImage = nil
     }
 }
 
+// MARK: - Custom Image Picker
 
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
 
-    // MARK: - Custom Image Picker
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        var parent: ImagePicker
 
-    struct ImagePicker: UIViewControllerRepresentable {
-        @Binding var image: UIImage?
+        init(parent: ImagePicker) {
+            self.parent = parent
+        }
 
-        class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-            var parent: ImagePicker
-
-            init(parent: ImagePicker) {
-                self.parent = parent
-            }
-
-            func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-                if let uiImage = info[.originalImage] as? UIImage {
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                if uiImage.size.width > 0 && uiImage.size.height > 0 {
                     parent.image = uiImage
+                } else {
+                    print("Selected image is invalid.")
                 }
-                picker.dismiss(animated: true)
             }
+            picker.dismiss(animated: true)
         }
-
-        func makeCoordinator() -> Coordinator {
-            Coordinator(parent: self)
-        }
-
-        func makeUIViewController(context: Context) -> UIImagePickerController {
-            let picker = UIImagePickerController()
-            picker.delegate = context.coordinator
-            return picker
-        }
-
-        func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
     }
 
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
 
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
 
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+}
