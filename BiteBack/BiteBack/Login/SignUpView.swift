@@ -348,7 +348,7 @@ struct SignUpView: View {
                 navigateToBusinessProfile = true
             } else {
                 // For personal users, simply dismiss to return to the login page.
-                dismiss()
+                navigateToMissions = true
             }
         }
     }
