@@ -26,7 +26,6 @@ struct AddMissionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Custom Back Button
             Button(action: { dismiss() }) {
                 Image(systemName: "arrow.left")
                     .foregroundColor(.gray)
@@ -98,12 +97,15 @@ struct AddMissionView: View {
                     }
 
                     GroupBox(label: Text("UPLOAD IMAGE").fontWeight(.bold)) {
-                        if let image = selectedImage {
+                        if let image = selectedImage, image.size.width > 0, image.size.height > 0 {
                             Image(uiImage: image)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 150)
                                 .cornerRadius(12)
+                        } else if selectedImage != nil {
+                            Text("Selected image is invalid.")
+                                .foregroundColor(.red)
                         }
 
                         Button("Select Image") {
@@ -136,22 +138,38 @@ struct AddMissionView: View {
         let restaurantRef = db.collection("restaurants")
 
         restaurantRef.whereField("name", isEqualTo: restaurantName).getDocuments { (snapshot, error) in
-            if let snapshot = snapshot, let doc = snapshot.documents.first {
-                uploadImage(restaurantId: doc.documentID)
+            if let error = error {
+                print("Error fetching restaurant: \(error.localizedDescription)")
+                return
             }
+
+            guard let snapshot = snapshot, let doc = snapshot.documents.first else {
+                print("No matching restaurant found.")
+                return
+            }
+
+            uploadImage(restaurantId: doc.documentID)
         }
     }
 
     func uploadImage(restaurantId: String) {
-        guard let imageData = selectedImage?.jpegData(compressionQuality: 0.8) else { return }
+        guard let imageData = selectedImage?.jpegData(compressionQuality: 0.8) else {
+            print("Failed to get image data.")
+            return
+        }
 
         let storageRef = Storage.storage().reference().child("missions/\(UUID().uuidString).jpg")
         storageRef.putData(imageData, metadata: nil) { _, error in
-            if error == nil {
-                storageRef.downloadURL { url, _ in
-                    if let imageUrl = url?.absoluteString {
-                        addMissionToRestaurant(restaurantId: restaurantId, imageUrl: imageUrl)
-                    }
+            if let error = error {
+                print("Upload error: \(error.localizedDescription)")
+                return
+            }
+
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    print("Failed to get download URL: \(error.localizedDescription)")
+                } else if let imageUrl = url?.absoluteString {
+                    addMissionToRestaurant(restaurantId: restaurantId, imageUrl: imageUrl)
                 }
             }
         }
@@ -173,8 +191,13 @@ struct AddMissionView: View {
             "steps": formattedSteps
         ]
 
-        missionRef.setData(missionData) { _ in
-            dismiss()
+        missionRef.setData(missionData) { error in
+            if let error = error {
+                print("Error writing mission: \(error.localizedDescription)")
+            } else {
+                print("Mission successfully written.")
+                dismiss()
+            }
         }
     }
 
@@ -202,7 +225,11 @@ struct ImagePicker: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage
+                if uiImage.size.width > 0 && uiImage.size.height > 0 {
+                    parent.image = uiImage
+                } else {
+                    print("Selected image is invalid.")
+                }
             }
             picker.dismiss(animated: true)
         }
@@ -220,4 +247,3 @@ struct ImagePicker: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
-

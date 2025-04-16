@@ -315,9 +315,32 @@ struct SignUpView: View {
                         print("Error writing user data: \(err)")
                     } else {
                         print("User data successfully written!")
+
+                        // Also add to 'restaurants' collection if this is a business
+                        if selectedMode == .business {
+                            let restaurantData: [String: Any] = [
+                                "name": businessName,
+                                "email": businessEmail,
+                                "phone": businessPhone,
+                                "street": businessStreet,
+                                "city": businessCity,
+                                "state": businessState,
+                                "verifyBusiness": verifyBusiness,
+                                "ownerId": uid
+                            ]
+
+                            db.collection("restaurants").document(uid).setData(restaurantData) { err in
+                                if let err = err {
+                                    print("Error writing restaurant data: \(err)")
+                                } else {
+                                    print("Restaurant data successfully written!")
+                                }
+                            }
+                        }
                     }
                 }
             }
+
             
             // After successful sign-up, redirect based on user type.
             if selectedMode == .business {
