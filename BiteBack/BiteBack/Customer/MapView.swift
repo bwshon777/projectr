@@ -53,7 +53,8 @@ struct MapView: View {
     @State private var showingMissionSheet = false
     @State private var missions: [BusinessMission] = []
     @State private var route: MKRoute? = nil
-    @State private var hasSetInitialRegion = false  // 👈 NEW
+    @State private var initialRegion: MKCoordinateRegion? = nil
+
 
     private let geocoder = CLGeocoder()
 
@@ -308,15 +309,22 @@ struct MapView: View {
         .onAppear {
             fetchBusinessLocations()
         }
-        .onChange(of: "\(locationManager.userLocation?.latitude ?? 0),\(locationManager.userLocation?.longitude ?? 0)") { _ in
-            guard let newLocation = locationManager.userLocation, !hasSetInitialRegion else { return }
+        .onChange(of: "\(locationManager.userLocation?.latitude ?? 0),\(locationManager.userLocation?.longitude ?? 0)") {_ in
+            guard
+                let coord = locationManager.userLocation,
+                initialRegion == nil,
+                coord.latitude != 0 && coord.longitude != 0
+            else { return }
 
-            position = .region(MKCoordinateRegion(
-                center: newLocation,
+            initialRegion = MKCoordinateRegion(
+                center: coord,
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-            ))
-            hasSetInitialRegion = true
+            )
+            position = .region(initialRegion!)
+            print("🗺 User location updated to: \(coord.latitude), \(coord.longitude)")
+
         }
+
 
         .sheet(isPresented: $showingMissionSheet) {
             NavigationView {

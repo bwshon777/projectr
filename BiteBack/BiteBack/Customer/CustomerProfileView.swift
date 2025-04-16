@@ -9,6 +9,8 @@ struct CustomerProfileView: View {
     @State private var mode: String = ""
     @State private var showLogoutConfirmation = false
     @Environment(\.dismiss) var dismiss
+    @State private var missionsCompleted: Int = 0
+    @State private var rewardsRedeemed: Int = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,9 +32,7 @@ struct CustomerProfileView: View {
                     .padding(.bottom, 80)
             }
 
-            Spacer().frame(height: 90)
-
-            // MARK: - Info Card
+            // MARK: - Info Card (moved up here)
             VStack(spacing: 16) {
                 ProfileRow(icon: "person.fill", label: name)
                 ProfileRow(icon: "envelope.fill", label: email)
@@ -45,6 +45,40 @@ struct CustomerProfileView: View {
             .cornerRadius(20)
             .shadow(color: Color.black.opacity(0.1), radius: 6, x: 0, y: 4)
             .padding(.horizontal)
+            .padding(.top, -40)
+
+            // MARK: - Mission Stats
+            HStack {
+                VStack(spacing: 4) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .foregroundColor(.green)
+                        .font(.title2)
+                    Text("Missions Completed")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Text("\(missionsCompleted)")
+                        .font(.headline)
+                }
+
+                Spacer()
+
+                VStack(spacing: 4) {
+                    Image(systemName: "gift.fill")
+                        .foregroundColor(.red)
+                        .font(.title2)
+                    Text("Rewards Redeemed")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    Text("\(rewardsRedeemed)")
+                        .font(.headline)
+                }
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .padding(.horizontal)
+            .padding(.top, 16)
 
             Spacer()
 
@@ -89,9 +123,12 @@ struct CustomerProfileView: View {
         }
     }
 
+
     func loadUserData() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
+
+        // Load basic user data
         db.collection("users").document(userId).getDocument { document, error in
             if let data = document?.data() {
                 self.name = data["name"] as? String ?? ""
@@ -100,6 +137,17 @@ struct CustomerProfileView: View {
                 self.mode = data["mode"] as? String ?? ""
             }
         }
+
+        // Load mission stats
+        db.collection("users").document(userId)
+            .collection("completedMissions")
+            .getDocuments { snapshot, error in
+                guard let documents = snapshot?.documents else { return }
+                self.missionsCompleted = documents.count
+                self.rewardsRedeemed = documents.filter {
+                    ($0["redeemed"] as? Bool) == true
+                }.count
+            }
     }
 
     func logout() {
