@@ -110,39 +110,36 @@ import FirebaseFirestore
      }
  
      var statsCard: some View {
-         VStack(spacing: 20) {
-             HStack(spacing: 40) {
-                 Label {
-                     VStack(alignment: .leading) {
-                         Text("Completed by")
-                             .font(.caption)
-                             .foregroundColor(.gray)
-                         Text("\(completionCount) users")
-                             .font(.title2)
-                             .fontWeight(.medium)
-                     }
-                 } icon: {
-                     Image(systemName: "checkmark.seal.fill")
-                         .foregroundColor(.green)
-                 }
+         HStack(spacing: 40) {
+             VStack(spacing: 8) {
+                 Image(systemName: "checkmark.seal.fill")
+                     .foregroundColor(.green)
+                     .font(.title)
 
-                 Label {
-                     VStack(alignment: .leading) {
-                         Text("Redeemed by")
-                             .font(.caption)
-                             .foregroundColor(.gray)
-                         Text("\(redemptionCount) users")
-                             .font(.title2)
-                             .fontWeight(.medium)
-                     }
-                 } icon: {
-                     Image(systemName: "gift.fill")
-                         .foregroundColor(.red)
-                 }
+                 Text("Completed by")
+                     .font(.caption)
+                     .foregroundColor(.gray)
+
+                 Text("\(completionCount) users")
+                     .font(.title2)
+                     .fontWeight(.medium)
              }
              .frame(maxWidth: .infinity)
-             .multilineTextAlignment(.center)
-             .padding(.horizontal)
+
+             VStack(spacing: 8) {
+                 Image(systemName: "gift.fill")
+                     .foregroundColor(.red)
+                     .font(.title)
+
+                 Text("Redeemed by")
+                     .font(.caption)
+                     .foregroundColor(.gray)
+
+                 Text("\(redemptionCount) users")
+                     .font(.title2)
+                     .fontWeight(.medium)
+             }
+             .frame(maxWidth: .infinity)
          }
          .padding(24)
          .frame(maxWidth: .infinity)
