@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		01636E542D8A8E1E00ACC294 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E412D8A8E1E00ACC294 /* AppDelegate.swift */; };
 		01636E582D8A8E3C00ACC294 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */; };
-		01E621462D62EE1A00A75822 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01E621452D62EE1A00A75822 /* GoogleService-Info.plist */; };
 		0B78E8AF2DAD9E8400B9ADEE /* EditCustomerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E89E2DAD9E8400B9ADEE /* EditCustomerProfileView.swift */; };
 		0B78E8B02DAD9E8400B9ADEE /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E8A02DAD9E8400B9ADEE /* MapView.swift */; };
 		0B78E8B12DAD9E8400B9ADEE /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */; };
@@ -68,7 +67,6 @@
 /* Begin PBXFileReference section */
 		01636E412D8A8E1E00ACC294 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01636E562D8A8E3C00ACC294 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		01E621452D62EE1A00A75822 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B78E8942DAD9E8400B9ADEE /* AddMissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMissions.swift; sourceTree = "<group>"; };
 		0B78E8952DAD9E8400B9ADEE /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
 		0B78E8962DAD9E8400B9ADEE /* BusinessSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessSettingsView.swift; sourceTree = "<group>"; };
@@ -219,7 +217,6 @@
 				4B1F09512D50716400C143B0 /* Preview Content */,
 				4B1F09602D50744900C143B0 /* BiteBackApp.swift */,
 				4B1F095F2D50744800C143B0 /* BiteBack-Bridging-Header.h */,
-				01E621452D62EE1A00A75822 /* GoogleService-Info.plist */,
 			);
 			path = BiteBack;
 			sourceTree = "<group>";
@@ -325,7 +322,6 @@
 				0B78E8C52DAD9E8400B9ADEE /* Preview Assets.xcassets in Resources */,
 				4B1F09532D50716400C143B0 /* Preview Assets.xcassets in Resources */,
 				4B1F09502D50716400C143B0 /* Assets.xcassets in Resources */,
-				01E621462D62EE1A00A75822 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,7 +493,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = FLB323CGJ3;
+				DEVELOPMENT_TEAM = 5ZNL3KD7H4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs the camera to scan QR codes and redeem rewards.";
@@ -532,7 +528,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BiteBack/Preview Content\"";
-				DEVELOPMENT_TEAM = FLB323CGJ3;
+				DEVELOPMENT_TEAM = 5ZNL3KD7H4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs the camera to scan QR codes and redeem rewards.";
